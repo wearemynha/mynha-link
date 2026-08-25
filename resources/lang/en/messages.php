@@ -758,6 +758,7 @@ return [
     'This setup will:' => 'This setup will:',
     'Check the server dependencies' => '1. Check the server dependencies',
     'Setup the database' => '2. Setup the database',
+    'PostgreSQL configuration is provided through environment variables.' => 'PostgreSQL configuration is provided through environment variables.',
     'Create the admin user' => '3. Create the admin user',
     'Configure the app' => '4. Configure the app',
     'Choose a language' => 'Choose a language',

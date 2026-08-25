@@ -25,15 +25,13 @@ function getUrlSatusCode($url, $timeout = 3)
 
 //Files or directories to test if writable
 $wrt1 = is_writable(base_path('.env'));
-$wrt2 = is_writable(base_path('database/database.sqlite'));
 
 //Files or directories to test if accessible externally
 $url1 = getUrlSatusCode(url('.env'));
-$url2 = getUrlSatusCode(url('database/database.sqlite'));
 
 ?>
 
-        @if($url1 == '200' or $url2 == '200')
+        @if($url1 == '200')
         <a href="https://docs.linkstack.org/installation-requirements/" target="_blank"><h4 style="color:tomato;">{{__('messages.security.risk')}}</h4></a>
         @endif
 
@@ -53,10 +51,6 @@ $url2 = getUrlSatusCode(url('database/database.sqlite'));
             <td title="">{{ url('/.env') }}</td>
             <?php if($url1 == '200'){echo "$utrue";} elseif($url1 == '0'){echo "$unull";} else{echo "$ufalse";} ?>
           </tr>
-          <tr>
-            <td title="">{{ url('/database/database.sqlite') }}</td>
-            <?php if($url2 == '200'){echo "$utrue";} elseif($url2 == '0'){echo "$unull";} else{echo "$ufalse";} ?>
-          </tr>
         </tbody>
         </table>
 
@@ -74,10 +68,6 @@ $url2 = getUrlSatusCode(url('database/database.sqlite'));
           <tr>
           <td title="">{{ base_path(".env") }}</td>
           <?php if ($wrt1 > 0) {echo "$wtrue";} else {echo "$wfalse";} ?>
-          </tr>
-          <tr>
-            <td title="">{{ base_path("database/database.sqlite") }}</td>
-            <?php if ($wrt2 > 0) {echo "$wtrue";} else {echo "$wfalse";} ?>
           </tr>
         </tbody>
         </table>
@@ -100,6 +90,5 @@ $url2 = getUrlSatusCode(url('database/database.sqlite'));
         <tr><td>PDO {{__('messages.PHP Extension')}}</td><td id="dp">@if(extension_loaded('PDO'))<i class='bi bi-check-lg'></i>@else<i class='bi bi-x'></i>@endif</td></tr>
         <tr><td>Tokenizer {{__('messages.PHP Extension')}}</td><td id="dp">@if(extension_loaded('Tokenizer'))<i class='bi bi-check-lg'></i>@else<i class='bi bi-x'></i>@endif</td></tr>
         <tr><td>XML {{__('messages.PHP Extension')}}</td><td id="dp">@if(extension_loaded('XML'))<i class='bi bi-check-lg'></i>@else<i class='bi bi-x'></i>@endif</td></tr>
-        <tr><td>SQLite {{__('messages.PHP Extension')}}</td><td id="dp">@if(extension_loaded('PDO_SQLite'))<i class='bi bi-check-lg'></i>@else<i class='bi bi-x'></i>@endif</td></tr>
-        <tr><td>MySQL {{__('messages.PHP Extension')}}</td><td id="dp">@if(extension_loaded('PDO_MySQL'))<i class='bi bi-check-lg'></i>@else<i class='bi bi-x'></i>@endif</td></tr>
+        <tr><td>PostgreSQL {{__('messages.PHP Extension')}}</td><td id="dp">@if(extension_loaded('pdo_pgsql'))<i class='bi bi-check-lg'></i>@else<i class='bi bi-x'></i>@endif</td></tr>
         </table>

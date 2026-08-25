@@ -1,5 +1,8 @@
 <?php
 
+use GeoSot\EnvEditor\Facades\EnvEditor;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdminController;
@@ -8,8 +11,6 @@ use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\LinkTypeViewController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\InstallerController;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,12 +38,9 @@ $installerActive = !app()->environment('testing') && (file_exists(base_path('INS
 if ($installerActive) {
 
   Route::get('/', [InstallerController::class, 'showInstaller'])->name('showInstaller');
+  Route::post('/prepare-database', [InstallerController::class, 'prepareDatabase'])->name('prepareDatabase');
   Route::post('/create-admin', [InstallerController::class, 'createAdmin'])->name('createAdmin');
-  Route::post('/db', [InstallerController::class, 'db'])->name('db');
-  Route::post('/mysql', [InstallerController::class, 'mysql'])->name('mysql');
   Route::post('/options', [InstallerController::class, 'options'])->name('options');
-  Route::get('/mysql-test', [InstallerController::class, 'mysqlTest'])->name('mysqlTest');
-  Route::get('/skip', function () {Artisan::call('db:seed', ['--class' => 'AdminSeeder',]); Auth::login(User::where('name', 'admin')->first()); return redirect(url('dashboard'));});
   Route::post('/editConfigInstaller', [InstallerController::class, 'editConfigInstaller'])->name('editConfigInstaller');
 
   Route::get('{any}', function() {

@@ -65,10 +65,9 @@ function getUrlSatusCodesb($urlsb, $timeoutsb = 3)
 
 // Files or directories to test if accessible externally
 $url1sb = getUrlSatusCodesb(url('.env'));
-$url2sb = getUrlSatusCodesb(url('database/database.sqlite'));
 
 // sets compromised to true if config files got compromised
-if($url1sb == '200'  or $url2sb == '200') {
+if($url1sb == '200') {
 	$compromised = true;
 } else {
 	$compromised = false;

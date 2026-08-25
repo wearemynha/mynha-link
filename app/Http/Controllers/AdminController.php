@@ -190,7 +190,7 @@ class AdminController extends Controller
     $status = $request->verify;
 
     if ($status == "true") {
-      $verify = "0000-00-00 00:00:00";
+      $verify = now();
     } else {
       $verify = null;
     }

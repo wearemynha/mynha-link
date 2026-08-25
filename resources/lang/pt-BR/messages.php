@@ -721,6 +721,7 @@ return array(
 	'This setup will:' => 'Essa configuração irá:',
 	'Check the server dependencies' => 'Verificar as dependências do servidor',
 	'Setup the database' => 'Configurar o banco de dados',
+	'PostgreSQL configuration is provided through environment variables.' => 'A configuração do PostgreSQL é fornecida por variáveis de ambiente.',
 	'Create the admin user' => 'Criar o usuário administrador',
 	'Configure the app' => 'Configurar o aplicativo',
 	'Choose a language' => 'Escolher um idioma',
