@@ -7,8 +7,8 @@ use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
 use JeroenDesloovere\VCard\VCard;
+use Livewire\Livewire;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tests\TestCase;
 
@@ -16,11 +16,26 @@ class ApplicationBaselineTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_linkstack_uri_builds_a_protocol_relative_application_url(): void
+    {
+        $this->assertSame('//localhost/assets/theme.css', linkstack_uri('assets/theme.css'));
+    }
+
     public function test_essential_routes_are_registered(): void
     {
         foreach (['home', 'login', 'panelIndex', 'littlelink', 'vcard'] as $route) {
             $this->assertTrue(Route::has($route), "Expected route [{$route}] to be registered.");
         }
+    }
+
+    public function test_named_routes_are_unique_and_littlelink_is_canonical(): void
+    {
+        $routeNames = collect(Route::getRoutes()->getRoutes())
+            ->map(fn ($route) => $route->getName())
+            ->filter();
+
+        $this->assertCount($routeNames->unique()->count(), $routeNames);
+        $this->assertSame('http://localhost/@example', route('littlelink', ['littlelink' => 'example']));
     }
 
     public function test_home_page_is_available(): void

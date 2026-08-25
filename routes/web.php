@@ -74,7 +74,7 @@ Route::get('/panel/diagnose', function () {
 $custom_prefix = config('advanced-config.custom_url_prefix');
 Route::get('/going/{id?}', [UserController::class, 'clickNumber'])->where('link', '.*')->name('clickNumber')->middleware('disableCookies');
 Route::get('/info/{id?}', [AdminController::class, 'redirectInfo'])->name('redirectInfo');
-if($custom_prefix != ""){Route::get('/' . $custom_prefix . '{littlelink}', [UserController::class, 'littlelink'])->name('littlelink');}
+if($custom_prefix != ""){Route::get('/' . $custom_prefix . '{littlelink}', [UserController::class, 'littlelink'])->name('littlelink.custom-prefix');}
 Route::get('/@{littlelink}', [UserController::class, 'littlelink'])->name('littlelink')->middleware('disableCookies');
 Route::get('/pages/'.strtolower(footer('Terms')), [AdminController::class, 'pagesTerms'])->name('pagesTerms')->middleware('disableCookies');
 Route::get('/pages/'.strtolower(footer('Privacy')), [AdminController::class, 'pagesPrivacy'])->name('pagesPrivacy')->middleware('disableCookies');
@@ -115,7 +115,7 @@ Route::post('/studio/edit-link/{id}', [UserController::class, 'editLink'])->name
 Route::get('/studio/button-editor/{id}', [UserController::class, 'showCSS'])->name('showCSS')->middleware('link-id');
 Route::post('/studio/button-editor/{id}', [UserController::class, 'editCSS'])->name('editCSS')->middleware('link-id');
 Route::get('/studio/page', [UserController::class, 'showPage'])->name('showPage');
-Route::get('/studio/no_page_name', [UserController::class, 'showPage'])->name('showPage');
+Route::get('/studio/no_page_name', [UserController::class, 'showPage'])->name('showPageWithoutName');
 Route::post('/studio/page', [UserController::class, 'editPage'])->name('editPage');
 Route::post('/studio/background', [UserController::class, 'themeBackground'])->name('themeBackground');
 Route::get('/studio/rem-background', [UserController::class, 'removeBackground'])->name('removeBackground');
@@ -124,7 +124,7 @@ Route::post('/studio/profile', [UserController::class, 'editProfile'])->name('ed
 Route::post('/edit-icons', [UserController::class, 'editIcons'])->name('editIcons');
 Route::get('/clearIcon/{id}', [UserController::class, 'clearIcon'])->name('clearIcon')->middleware('link-id');
 Route::get('/studio/page/delprofilepicture', [UserController::class, 'delProfilePicture'])->name('delProfilePicture');
-Route::get('/studio/delete-user/{id}', [UserController::class, 'deleteUser'])->name('deleteUser')->middleware('verified');
+Route::get('/studio/delete-user/{id}', [UserController::class, 'deleteUser'])->name('deleteOwnUser')->middleware('verified');
 Route::post('/auth-as', [AdminController::class, 'authAs'])->name('authAs');
 
 // Catch all redirects
@@ -168,9 +168,9 @@ Route::group([
     Route::post('/admin/delete-table-user/{id}', [AdminController::class, 'deleteTableUser'])->name('deleteTableUser');
     Route::get('/admin/pages', [AdminController::class, 'showSitePage'])->name('showSitePage');
     Route::post('/admin/pages', [AdminController::class, 'editSitePage'])->name('editSitePage');
-    Route::get('/admin/advanced-config', [AdminController::class, 'showFileEditor'])->name('showFileEditor');
+    Route::get('/admin/advanced-config', [AdminController::class, 'showFileEditor'])->name('showAdvancedConfig');
     Route::post('/admin/advanced-config', [AdminController::class, 'editAC'])->name('editAC');
-    Route::get('/admin/env', [AdminController::class, 'showFileEditor'])->name('showFileEditor');
+    Route::get('/admin/env', [AdminController::class, 'showFileEditor'])->name('showEnvironmentEditor');
     Route::post('/admin/env', [AdminController::class, 'editENV'])->name('editENV');
     Route::get('/admin/site', [AdminController::class, 'showSite'])->name('showSite');
     Route::post('/admin/site', [AdminController::class, 'editSite'])->name('editSite');
@@ -209,5 +209,5 @@ Route::get('/{any}', function () {
 require __DIR__.'/auth.php';
 
 if(config('advanced-config.custom_url_prefix') == ""){
-  Route::get('/{littlelink}', [UserController::class, 'littlelink'])->name('littlelink');
+  Route::get('/{littlelink}', [UserController::class, 'littlelink'])->name('littlelink.catchall');
 }
