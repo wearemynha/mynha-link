@@ -203,9 +203,9 @@ You can still download updates manually. New versions will are still uploaded to
 
 Before updating, the updater will create a backup. Your instance won’t save more than two backups at a time. You can download these updates from the created folder: `backups\updater-backups`.
 
-If you switched your database to MySQL, your database will not be included in the backup.
+PostgreSQL backups require the `pg_dump` client to be available to the PHP process.
 
-The updater may fail without throwing an error and just remain on the current version if there are unmet dependencies. This could include not having the correct version of the dependencies (eg. having php-sqlite3 pointing to php8.3-sqlite3, while LinkStack uses PHP 8.2 and needs php8.2-sqlite3). To troubleshoot, update manually and check the errors thown by the instance when accessing the website, as well as the PHP version reported.
+The updater may fail without throwing an error and just remain on the current version if there are unmet dependencies. This could include a missing PostgreSQL PHP extension or an unavailable `pg_dump` client. To troubleshoot, update manually and check the errors thrown by the instance when accessing the website, as well as the PHP version reported.
 
 <a name="Discord"></a>
 ## Discord
