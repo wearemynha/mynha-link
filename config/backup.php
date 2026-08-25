@@ -152,6 +152,8 @@ return [
             'disks' => [
                 'backups',
             ],
+
+            'continue_on_failure' => false,
         ],
 
         /*
@@ -173,6 +175,8 @@ return [
          * available on your system.
          */
         'encryption' => 'default',
+
+        'verify_backup' => false,
 
         /*
          * The number of attempts, in case the backup command encounters an exception
@@ -244,7 +248,12 @@ return [
              */
             'avatar_url' => '',
         ],
+        'webhook' => [
+            'url' => '',
+        ],
     ],
+
+    'log_channel' => null,
 
     /*
      * Here you can specify which backups should be monitored.

@@ -198,4 +198,17 @@ return [
 
     'same_site' => 'lax',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | JSON avoids PHP object deserialization in session data. The application
+    | stores only scalar values and arrays in the session.
+    |
+    | Supported: "json", "php"
+    |
+    */
+
+    'serialization' => 'json',
 ];
