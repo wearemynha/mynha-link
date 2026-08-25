@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Http\Livewire\UserTable;
 use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 use JeroenDesloovere\VCard\VCard;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tests\TestCase;
@@ -67,6 +69,12 @@ class ApplicationBaselineTest extends TestCase
         $svg = QrCode::size(100)->generate('https://example.com');
 
         $this->assertStringContainsString('<svg', $svg);
+    }
+
+    public function test_user_table_livewire_component_renders(): void
+    {
+        Livewire::test(UserTable::class)
+            ->assertOk();
     }
 
     public function test_vcard_generation_contains_contact_data(): void

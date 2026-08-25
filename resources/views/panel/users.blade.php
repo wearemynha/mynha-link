@@ -91,7 +91,7 @@
 
                           // Function to refresh the Livewire table
                           var refreshLivewireTable = function() {
-                            Livewire.components.getComponentsByName('user-table')[0].$wire.$refresh()
+                            Livewire.getByName('user-table')[0]?.$refresh()
                           };
                       
                           attachClickEventListeners('confirmation', confirmIt);
@@ -170,13 +170,7 @@ deleteButton.addEventListener('click', deleteSelectedUsers);
     </div>
   </div>
 
-@push('sidebar-stylesheets')
-<script defer src="{{url('assets/js/cdn.min.js')}}"></script>
-<script src="{{url('vendor/livewire/livewire/dist/livewire.js')}}"></script>
-@endpush
-
 @push('sidebar-scripts')
-<livewire:scripts />
 <script src="{{url('assets/js/livewire-sortable.js')}}"></script>
 @endpush
 
