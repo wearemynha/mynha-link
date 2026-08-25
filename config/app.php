@@ -1,12 +1,6 @@
 <?php
 
-function locales($key, $default)
-{
-    $value = env($key, $default);
-    $array = explode(',', $value);
-    $trimmedArray = array_map('trim', $array);
-    return $trimmedArray;
-}
+$supportedLocales = array_map('trim', explode(',', env('LOCALES', 'de, es, pt, zh, ms')));
 
 return [
 
@@ -19,7 +13,7 @@ return [
     |
     */
 
-    'supported_locales' => locales('LOCALES', 'de, es, pt, zh, ms'),
+    'supported_locales' => $supportedLocales,
 
     /*
     |--------------------------------------------------------------------------
