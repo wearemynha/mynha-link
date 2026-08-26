@@ -13,10 +13,9 @@ class Impersonate
     public function handle($request, Closure $next)
     {
       if(Schema::hasColumn('users', 'auth_as')) {
-        $adminUser = User::where('role', 'admin')->where(function ($query) {
-            $query->where('auth_as', '!=', null)
-                ->where('auth_as', '!=', '');
-        })->first();
+        $adminUser = User::where('role', 'admin')
+            ->whereNotNull('auth_as')
+            ->first();
 
         if ($adminUser && is_numeric($adminUser->auth_as)) {
             $originalUserId = $adminUser->id;
