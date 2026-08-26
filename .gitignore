@@ -1,6 +1,7 @@
 /assets/favicon/icons
 /node_modules
-/public/hot
+/build
+/hot
 /public/storage
 /storage/*.key
 /vendor
