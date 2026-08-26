@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Http\Livewire\UserTable;
+use App\Models\Link;
+use App\Models\User;
+use App\Services\VCardBuilder;
 use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use JeroenDesloovere\VCard\VCard;
 use Livewire\Livewire;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tests\TestCase;
@@ -92,17 +94,77 @@ class ApplicationBaselineTest extends TestCase
             ->assertOk();
     }
 
-    public function test_vcard_generation_contains_contact_data(): void
+    public function test_vcard_generation_contains_and_validates_contact_data(): void
     {
-        $vcard = new VCard();
-        $vcard->addName('Silva', 'Maria');
-        $vcard->addEmail('maria@example.com');
+        $output = app(VCardBuilder::class)->build([
+            'prefix' => 'Dra.',
+            'first_name' => 'Maria',
+            'middle_name' => 'Clara',
+            'last_name' => 'Silva',
+            'suffix' => 'PhD',
+            'organization' => 'Mynha',
+            'vtitle' => 'Diretora',
+            'role' => 'Gestão',
+            'email' => 'maria@example.com',
+            'work_email' => 'maria@mynha.example',
+            'work_url' => 'https://mynha.example',
+            'home_phone' => '+55 11 1111-1111',
+            'work_phone' => '+55 11 2222-2222',
+            'cell_phone' => '+55 11 99999-9999',
+            'home_address_street' => 'Rua A, 10',
+            'home_address_city' => 'São Paulo',
+            'home_address_state' => 'SP',
+            'home_address_zip' => '01000-000',
+            'home_address_country' => 'Brasil',
+            'work_address_street' => 'Avenida B, 20',
+            'work_address_city' => 'São Paulo',
+            'work_address_state' => 'SP',
+            'work_address_zip' => '02000-000',
+            'work_address_country' => 'Brasil',
+        ]);
 
-        $output = $vcard->buildVCard();
+        $vcard = \Sabre\VObject\Reader::read($output);
 
         $this->assertStringContainsString('BEGIN:VCARD', $output);
-        $this->assertStringContainsString('Maria', $output);
-        $this->assertStringContainsString('maria@example.com', $output);
         $this->assertStringContainsString('END:VCARD', $output);
+        $this->assertSame('Dra. Maria Clara Silva PhD', (string) $vcard->FN);
+        $this->assertSame(['Silva', 'Maria', 'Clara', 'Dra.', 'PhD'], $vcard->N->getParts());
+        $this->assertSame('Mynha', (string) $vcard->ORG);
+        $this->assertSame('Diretora', (string) $vcard->TITLE);
+        $this->assertSame('Gestão', (string) $vcard->ROLE);
+        $this->assertCount(2, $vcard->EMAIL);
+        $this->assertSame('maria@mynha.example', (string) $vcard->getByType('EMAIL', 'WORK'));
+        $this->assertSame('+55 11 99999-9999', (string) $vcard->getByType('TEL', 'CELL'));
+        $this->assertSame('Rua A, 10', $vcard->getByType('ADR', 'HOME')->getParts()[2]);
+        $this->assertSame([], $vcard->validate());
+    }
+
+    public function test_vcard_endpoint_downloads_the_contact_and_counts_the_click(): void
+    {
+        $user = User::factory()->create();
+        $link = new Link([
+            'title' => 'Contato',
+            'type' => 'vcard',
+            'link' => json_encode([
+                'first_name' => 'Maria',
+                'last_name' => 'Silva',
+                'email' => 'maria@example.com',
+            ]),
+        ]);
+        $link->user_id = $user->id;
+        $link->save();
+
+        $response = $this->get(route('vcard', ['id' => $link->id]));
+
+        $response
+            ->assertOk()
+            ->assertHeader('Content-Type', 'text/vcard; charset=utf-8')
+            ->assertHeader('Content-Disposition', 'attachment; filename="contact.vcf"');
+
+        $vcard = \Sabre\VObject\Reader::read($response->getContent());
+
+        $this->assertSame('Maria Silva', (string) $vcard->FN);
+        $this->assertSame('maria@example.com', (string) $vcard->EMAIL);
+        $this->assertSame(1, $link->fresh()->click_number);
     }
 }

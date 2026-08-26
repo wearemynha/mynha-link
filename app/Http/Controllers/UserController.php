@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\VCardBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Cohensive\OEmbed\Facades\OEmbed;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
-use JeroenDesloovere\VCard\VCard;
+
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -383,7 +384,7 @@ class UserController extends Controller
     }
 
     //Download Vcard
-    public function vcard(request $request)
+    public function vcard(Request $request, VCardBuilder $vcardBuilder)
     {
         $linkId = $request->id;
 
@@ -395,43 +396,19 @@ class UserController extends Controller
         // Decode the JSON to a PHP array
         $data = json_decode($json, true);
         
-        // Create a new vCard object
-        $vcard = new VCard();
-        
-        // Set the vCard properties from the $data array
-        $vcard->addName($data['last_name'], $data['first_name'], $data['middle_name'], $data['prefix'], $data['suffix']);
-        $vcard->addCompany($data['organization']);
-        $vcard->addJobtitle($data['vtitle']);
-        $vcard->addRole($data['role']);
-        $vcard->addEmail($data['email']);
-        $vcard->addEmail($data['work_email'], 'WORK');
-        $vcard->addURL($data['work_url'], 'WORK');
-        $vcard->addPhoneNumber($data['home_phone'], 'HOME');
-        $vcard->addPhoneNumber($data['work_phone'], 'WORK');
-        $vcard->addPhoneNumber($data['cell_phone'], 'CELL');
-        if (array_filter([$data['home_address_street'], $data['home_address_city'], $data['home_address_state'], $data['home_address_zip'], $data['home_address_country']], fn ($part) => trim((string) $part) !== '')) {
-            $vcard->addAddress($data['home_address_street'], '', $data['home_address_city'], $data['home_address_state'], $data['home_address_zip'], $data['home_address_country'], 'HOME');
-        }
-        if (array_filter([$data['work_address_street'], $data['work_address_city'], $data['work_address_state'], $data['work_address_zip'], $data['work_address_country']], fn ($part) => trim((string) $part) !== '')) {
-            $vcard->addAddress($data['work_address_street'], '', $data['work_address_city'], $data['work_address_state'], $data['work_address_zip'], $data['work_address_country'], 'WORK');
-        }
-        
-
-        // $vcard->addPhoto(base_path('img/1.png'));
-        
         // Generate the vCard file contents
-        $file_contents = $vcard->getOutput();
+        $fileContents = $vcardBuilder->build($data);
         
         // Set the file headers for download
         $headers = [
-            'Content-Type' => 'text/x-vcard',
+            'Content-Type' => 'text/vcard; charset=utf-8',
             'Content-Disposition' => 'attachment; filename="contact.vcf"'
         ];
         
         Link::where('id', $linkId)->increment('click_number', 1);
 
         // Return the file download response
-        return response()->make($file_contents, 200, $headers);
+        return response()->make($fileContents, 200, $headers);
 
     }
 

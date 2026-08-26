@@ -10,12 +10,12 @@
         "cohensive/oembed": "^0.20",
         "geo-sot/laravel-env-editor": "^2.1",
         "guzzlehttp/guzzle": "^7.4",
-        "jeroendesloovere/vcard": "^1.7",
         "laravel/framework": "^13.0",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^3.4",
         "rappasoft/laravel-livewire-tables": "^3.8",
+        "sabre/vobject": "^5.0",
         "simplesoftwareio/simple-qrcode": "~4",
         "spatie/laravel-backup": "^10.0",
         "symfony/yaml": "^7.0"
