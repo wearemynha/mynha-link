@@ -66,6 +66,8 @@ $usrhandl = Auth::user()->littlelink_name;
 	  <link rel="stylesheet" href="{{ asset('assets/linkstack/css/animate.css') }}">
 	  <link rel="stylesheet" href="{{ asset('assets/external-dependencies/bootstrap-icons.css') }}">
 
+      @livewireStyles
+
   </head>
   <body class="  ">
     <!-- loader Start -->
@@ -723,6 +725,10 @@ $usrhandl = Auth::user()->littlelink_name;
             var downloadButton = document.getElementById("downloadButton");
             var generatedImage = document.getElementById("generatedImage");
         
+            if (!downloadButton || !generatedImage) {
+                return;
+            }
+
             downloadButton.addEventListener("click", function() {
                 var format = generatedImage.getAttribute("data-format") || "png";
                 var downloadLink = document.createElement("a");
@@ -814,6 +820,7 @@ $usrhandl = Auth::user()->littlelink_name;
 <script src="{{ asset('assets/js/jquery-block-ui.js') }}"></script>
 <script src="{{ asset('assets/js/main-dashboard.js') }}"></script>
 
+@livewireScripts
 @stack('sidebar-scripts')
 
   </body>

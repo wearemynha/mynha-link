@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Services\AdvancedConfigManager;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Support\CreatesApplicationData;
 use Tests\TestCase;
@@ -31,9 +33,33 @@ class AdminUserManagementTest extends TestCase
             'block' => 'no',
         ]);
 
-        $this->actingAs($admin)
+        $usersResponse = $this->actingAs($admin)
             ->get(route('showUsers'))
             ->assertOk();
+
+        $usersHtml = $usersResponse->getContent();
+        $livewireScriptPosition = strpos($usersHtml, 'livewire/livewire.js');
+        $sortableScriptPosition = strpos($usersHtml, 'assets/js/livewire-sortable.js');
+
+        $this->assertNotFalse($livewireScriptPosition);
+        $this->assertNotFalse($sortableScriptPosition);
+        $this->assertLessThan($sortableScriptPosition, $livewireScriptPosition);
+
+        $this->actingAs($admin)
+            ->get(route('showUser', ['id' => $user->id]))
+            ->assertOk()
+            ->assertSee('Managed User');
+
+        $advancedConfigManager = \Mockery::mock(AdvancedConfigManager::class);
+        $advancedConfigManager->shouldReceive('ensureExists')
+            ->once()
+            ->andReturn(storage_path('templates/advanced-config.php'));
+        $this->app->instance(AdvancedConfigManager::class, $advancedConfigManager);
+
+        $this->actingAs($admin)
+            ->get(route('showConfig'))
+            ->assertOk()
+            ->assertSee('custom_url_prefix');
 
         $this->actingAs($admin)
             ->get(route('blockUser', ['block' => 'no', 'id' => $user->id]))

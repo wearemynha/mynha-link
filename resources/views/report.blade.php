@@ -54,11 +54,11 @@
 
 @php
 
-if ($_SERVER['QUERY_STRING'] != '') { 
+if (request()->server('QUERY_STRING', '') != '') {
 
     try {
 
-    $id = $_SERVER['QUERY_STRING'];
+    $id = request()->server('QUERY_STRING', '');
     $user = \App\Models\User::where('id', $id)->first();
     $name = $user->littlelink_name;
     if ($name != null)$url = url('') . '/@' . $name;

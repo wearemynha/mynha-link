@@ -28,6 +28,7 @@ use App\Models\Button;
 use App\Models\Link;
 use App\Models\Page;
 use App\Models\UserData;
+use App\Services\AdvancedConfigManager;
 
 class AdminController extends Controller
 {
@@ -733,9 +734,13 @@ class AdminController extends Controller
   }
 
   //Shows config file editor page
-  public function showConfig(request $request)
+  public function showConfig(request $request, AdvancedConfigManager $advancedConfigManager)
   {
-    return view("/panel/config-editor");
+    $advancedConfigPath = $advancedConfigManager->ensureExists();
+
+    return view('/panel/config-editor', [
+      'advancedConfig' => file_get_contents($advancedConfigPath),
+    ]);
   }
 
   //Shows config file editor page

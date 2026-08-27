@@ -1,13 +1,16 @@
 @extends('layouts.installing')
 
+@php
+$queryString = request()->server('QUERY_STRING', '');
+@endphp
 
 @Push('installer-body')
 <div class="container">
 
-@if($_SERVER['QUERY_STRING'] === '')
+@if($queryString === '')
 {{-- Landing page --}}
 
-@if(!DB::table('users')->get()->isEmpty())
+@if(\Illuminate\Support\Facades\Schema::hasTable('users') && DB::table('users')->exists())
     @php
     if(file_exists(base_path("INSTALLING"))){unlink(base_path("INSTALLING"));}
     header("Refresh:0");
@@ -72,7 +75,7 @@
       
 @endif
 
-@if($_SERVER['QUERY_STRING'] === 'error')
+@if($queryString === 'error')
 {{-- Landing page --}}
         
         <div class="logo-container fadein">
@@ -86,7 +89,7 @@
       
 @endif
 
-@if($_SERVER['QUERY_STRING'] === '2')
+@if($queryString === '2')
 {{-- Landing page --}}
         
         <div class="logo-container fadein">
@@ -123,7 +126,7 @@
       
 @endif
 
-@if($_SERVER['QUERY_STRING'] === '3')
+@if($queryString === '3')
 {{-- Database preparation --}}
 
         <div class="logo-container fadein">
@@ -139,7 +142,7 @@
 
 @endif
 
-@if($_SERVER['QUERY_STRING'] === '4')
+@if($queryString === '4')
 {{-- Landing page --}}
         
         <div class="logo-container fadein">
@@ -171,7 +174,7 @@
       
 @endif
 
-@if($_SERVER['QUERY_STRING'] === '5')
+@if($queryString === '5')
 {{-- Landing page --}}
         
         <div class="logo-container fadein">
