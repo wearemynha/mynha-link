@@ -3,8 +3,8 @@
   @csrf
   <div class="form-group">
     <label>{{__('messages.Advanced Configuration file.')}}</label>
-    <textarea style="width:100%;display:none;" class="form-control" name="AdvancedConfig" rows="280">{{ file_get_contents('config/advanced-config.php') }}</textarea>
-    <div id="editor" style="width:100%; height:<?php echo count(file('config/advanced-config.php')) * 24 + 15;?>px; background-color:transparent !important;" class="form-control border-1 border-light" name="AdvancedConfig" rows="280">{{ file_get_contents('config/advanced-config.php') }}</div>
+    <textarea style="width:100%;display:none;" class="form-control" name="AdvancedConfig" rows="280">{{ $advancedConfig }}</textarea>
+    <div id="editor" style="width:100%; height:{{ (substr_count($advancedConfig, "\n") + 1) * 24 + 15 }}px; background-color:transparent !important;" class="form-control border-1 border-light" name="AdvancedConfig" rows="280">{{ $advancedConfig }}</div>
   </div>
   <button type="submit" class="btn btn-primary" id="saveBtn">{{__('messages.Save')}}</button>
   <a class="btn btn-danger confirmation" href="#" id="restoreDefaultsBtn">{{__('messages.Restore defaults')}}</a>

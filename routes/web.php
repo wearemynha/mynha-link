@@ -4,6 +4,7 @@ use GeoSot\EnvEditor\Facades\EnvEditor;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\LinkTypeViewController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\InstallerController;
+use App\Services\AdvancedConfigManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +31,7 @@ if(file_exists(base_path('storage/app/ISINSTALLED'))){
   if(EnvEditor::getKey('APP_KEY')==''){try{Artisan::call('key:generate');} catch (exception $e) {}}
  
   // copies template meta config if none is present
-  if(!file_exists(base_path("config/advanced-config.php"))){copy(base_path('storage/templates/advanced-config.php'), base_path('config/advanced-config.php'));}
+  app(AdvancedConfigManager::class)->ensureExists();
  }
 
  // Installer
@@ -44,7 +46,7 @@ if ($installerActive) {
   Route::post('/editConfigInstaller', [InstallerController::class, 'editConfigInstaller'])->name('editConfigInstaller');
 
   Route::get('{any}', function() {
-    if(!DB::table('users')->get()->isEmpty()){
+    if (Schema::hasTable('users') && DB::table('users')->exists()) {
     if(file_exists(base_path("INSTALLING")) and !file_exists(base_path('INSTALLERLOCK'))){unlink(base_path("INSTALLING"));header("Refresh:0");}
     } else {
       return redirect(url(''));

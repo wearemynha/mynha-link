@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AdvancedConfigManager;
 use Exception;
 use GeoSot\EnvEditor\Facades\EnvEditor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class InstallerController extends Controller
 {
+    public function __construct(private readonly AdvancedConfigManager $advancedConfigManager)
+    {
+    }
 
     public function showInstaller()
     {
@@ -90,30 +95,30 @@ class InstallerController extends Controller
 
     public function options(Request $request)
     {
+        $validated = $request->validate([
+            'register' => ['required', Rule::in(['Yes', 'No'])],
+            'verify' => ['required', Rule::in(['Yes', 'No'])],
+            'page' => ['required', Rule::in(['Yes', 'No'])],
+            'app' => ['required', 'string', 'max:255'],
+        ]);
 
-        $user = User::find(1);
+        $user = User::findOrFail(1);
         $llName = $user->littlelink_name;
 
-        if($request->register == 'Yes'){ 
-            if(EnvEditor::keyExists('ALLOW_REGISTRATION')){EnvEditor::editKey('ALLOW_REGISTRATION', 'true');}else{EnvEditor::addKey('ALLOW_REGISTRATION', 'true');}
-        } else {
-            if(EnvEditor::keyExists('ALLOW_REGISTRATION')){EnvEditor::editKey('ALLOW_REGISTRATION', 'false');}else{EnvEditor::addKey('ALLOW_REGISTRATION', 'false');}
+        $this->advancedConfigManager->finalizeInstallation();
+
+        $this->setEnvironmentValue('ALLOW_REGISTRATION', $validated['register'] === 'Yes' ? 'true' : 'false');
+        $this->setEnvironmentValue('REGISTER_AUTH', $validated['verify'] === 'Yes' ? 'verified' : 'auth');
+        $this->setEnvironmentValue('HOME_URL', $validated['page'] === 'Yes' ? '"'.$llName.'"' : '');
+        $this->setEnvironmentValue('APP_NAME', '"'.$validated['app'].'"');
+
+        if (file_exists(base_path('INSTALLING'))) {
+            unlink(base_path('INSTALLING'));
         }
-
-        if($request->verify == 'Yes'){$value = "verified";}else{$value = "auth";}
-        if(EnvEditor::keyExists('REGISTER_AUTH')){EnvEditor::editKey('REGISTER_AUTH', $value);}
-
-        if($request->page == 'No'){$value = "";}else{$value = '"' . $llName . '"';}
-        if(EnvEditor::keyExists('HOME_URL')){EnvEditor::editKey('HOME_URL', $value);}
-
-        if(EnvEditor::keyExists('APP_NAME')){EnvEditor::editKey('APP_NAME', '"' . $request->app . '"');}
-
-        if(file_exists(base_path("INSTALLING"))){unlink(base_path("INSTALLING"));}
 
         $file = base_path('INSTALLERLOCK');
         if (file_exists($file)) {
             unlink($file) or die('Cannot delete file: '.$file);
-            sleep(1);
         }
 
         return redirect(url('dashboard'));
@@ -121,15 +126,29 @@ class InstallerController extends Controller
 
     public function editConfigInstaller(Request $request)
     {
+        $availableLocales = collect(glob(resource_path('lang/*'), GLOB_ONLYDIR))
+            ->map(fn (string $path) => basename($path))
+            ->values()
+            ->all();
 
-        $type = $request->type;
-        $entry = $request->entry;
-        $value = $request->value;
-        $value = '"' . $request->value . '"';
-        
-        if(EnvEditor::keyExists($entry)){EnvEditor::editKey($entry, $value);}
+        $validated = $request->validate([
+            'value' => ['required', 'string', Rule::in($availableLocales)],
+        ]);
 
-        return redirect(url('dashboard'));
+        $value = '"'.$validated['value'].'"';
+
+        $this->setEnvironmentValue('LOCALE', $value);
+
+        return redirect(url(''));
+    }
+
+    private function setEnvironmentValue(string $key, string $value): void
+    {
+        if (EnvEditor::keyExists($key)) {
+            EnvEditor::editKey($key, $value);
+        } else {
+            EnvEditor::addKey($key, $value);
+        }
     }
 
 }
