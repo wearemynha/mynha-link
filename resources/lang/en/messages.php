@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Show password' => 'Show password',
+    'Hide password' => 'Hide password',
 
     /*
     |--------------------------------------------------------------------------
@@ -20,7 +22,7 @@ return [
     'by' => 'by',
 
     'HOME.MESSAGE' => '
-    <p>Take control of your online presence with&nbsp;<a href="https://linkstack.org/"><strong>LinkStack</strong></a>
+    <p>Take control of your online presence with&nbsp;Mynha Link
      the privacy-focused, open-source <strong>link management platform</strong>. Create a customizable profile page to manage <strong>
      all your important links in one convenient location</strong> and give your audience a seamless browsing experience.</p>
      ',
@@ -34,7 +36,7 @@ return [
     | resources/views/demo.blade.php
     |
     */
-    
+
     'Example page' => 'Example page',
 
 
@@ -180,7 +182,7 @@ return [
     | resources/views/layouts/sidebar.blade.php
     |
     */
-    
+
     'View Page' => 'View Page',
     'Share your profile' => 'Share your profile',
     'Share your profile:' => 'Share your profile:',
@@ -195,7 +197,7 @@ return [
     # QR Code dropdown
     'Close' => 'Close',
     'Dismiss' => 'Dismiss',
-    
+
     # Notification dropdown
     'All Notifications' => 'All Notifications',
 
@@ -250,8 +252,8 @@ return [
     'Last 7 days' => 'Last 7 days',
     'Last 24 hours' => 'Last 24 hours',
     'Active users:' => 'Active users:',
-    
-    
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -335,7 +337,7 @@ return [
     'Customize' => 'Customize',
     'Delete' => 'Delete',
     'Clear icon cache' => 'Clear icon cache',
-    
+
     'confirm_delete' => 'Are you sure you want to delete :title?',
 
 
@@ -396,7 +398,7 @@ return [
     'The image must be' => 'The image must be:',
     'The image size should not exceed 2MB' => 'The image size should not exceed 2MB.',
     'Please select an image' => 'Please select an image.',
-    
+
 
     /*
     |--------------------------------------------------------------------------
@@ -445,7 +447,7 @@ return [
     | resources/views/panel/edit-user.blade.php
     |
     */
-    
+
     'Edit User' => 'Edit User',
     'Logo' => 'Logo',
     'Page description' => 'Page description',
@@ -742,10 +744,10 @@ return [
     */
 
     # Title Tag
-    'LinkStack setup' => 'LinkStack setup',
+    'LinkStack setup' => 'Mynha Link setup',
 
-    'Setup LinkStack' => 'Setup LinkStack',
-    'Welcome to the setup for LinkStack!' => 'Welcome to the setup for LinkStack!',
+    'Setup LinkStack' => 'Setup Mynha Link',
+    'Welcome to the setup for LinkStack!' => 'Welcome to the setup for Mynha Link!',
     'This setup will:' => 'This setup will:',
     'Check the server dependencies' => '1. Check the server dependencies',
     'Setup the database' => '2. Setup the database',
@@ -830,7 +832,7 @@ return [
     'Error' => 'Error',
     'Something went wrong with the update' => 'Something went wrong with the update',
 
-    
+
     /*
     |--------------------------------------------------------------------------
     | Backup
@@ -983,7 +985,7 @@ return [
     'Block User' => 'Block User',
     'Users Theme' => 'Theme',
     'Search User' => 'Search for User',
-    
+
     'Edit my profile' => 'Edit my profile',
 
 
@@ -1071,7 +1073,7 @@ return [
     'other_specify' => 'Other (Specify)',
     'additional_comments_label' => 'Additional comments',
     'submit_button' => 'Submit',
-    
+
 
     'report_mail_admin_subject' => 'Profile Report',
     'report_mail_admin_report' => 'A Profile has been reported',
@@ -1092,7 +1094,7 @@ return [
     'report_error' => 'Profile could not be reported',
     'report_success' => 'Profile has been reported successfully',
 
-    
+
     #=============================================================================#
     # Laravel internal translations                                               #
     #=============================================================================#

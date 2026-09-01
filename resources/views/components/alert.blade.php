@@ -1,4 +1,3 @@
-    <div {{ $attributes->merge(['class' => 'alert alert-'.$type]) }}>
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>{{ $slot }}</strong>
-    </div>
+<x-mynha.alert :type="$type" dismissible {{ $attributes }}>
+    <strong>{{ $slot }}</strong>
+</x-mynha.alert>
