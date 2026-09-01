@@ -44,7 +44,33 @@ class ApplicationBaselineTest extends TestCase
     {
         $this->seed(PageSeeder::class);
 
-        $this->get('/')->assertOk();
+        $this->get('/')->assertOk()
+            ->assertSee('class="mynha-ui mynha-home"', false)
+            ->assertSee('assets/mynha-assets/mynha.css', false)
+            ->assertSee('assets/mynha-assets/mynha-icon-preto-verde.svg', false)
+            ->assertSee(route('login'), false)
+            ->assertSee('src="'.url('/demo-page').'"', false)
+            ->assertDontSee('hope-ui.min.css', false)
+            ->assertDontSee('detect-dark-mode.js', false);
+    }
+
+    public function test_home_page_preserves_its_custom_message(): void
+    {
+        $this->seed(PageSeeder::class);
+        \DB::table('pages')->update(['home_message' => '<p>Welcome to our company links.</p>']);
+
+        $this->get('/')->assertOk()
+            ->assertSee('<p>Welcome to our company links.</p>', false)
+            ->assertSee('content="Welcome to our company links."', false);
+    }
+
+    public function test_home_page_offers_the_dashboard_to_authenticated_users(): void
+    {
+        $this->seed(PageSeeder::class);
+
+        $this->actingAs(User::factory()->create())->get('/')->assertOk()
+            ->assertSee('href="'.url('dashboard').'"', false)
+            ->assertDontSee('href="'.route('login').'"', false);
     }
 
     public function test_login_page_is_available(): void
