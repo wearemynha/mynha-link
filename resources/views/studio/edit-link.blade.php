@@ -82,7 +82,7 @@
                             $description = bt($lt['description']) ?? __('messages.block.description.'.$lt['typename']); 
                             @endphp
                             <a href="#" data-dismiss="modal" data-typeid="{{$lt['typename']}}" data-typename="{{$title}}" class="hvr-grow m-2 w-100 d-block doSelectLinkType">
-                                <div class="rounded mb-3 shadow-lg">
+                                <div class="rounded mb-3 shadow-lg mynha-block-option">
                                     <div class="row g-0">
                                         <div class="col-auto bg-light d-flex align-items-center justify-content-center p-3">
                                             <i class="{{$lt['icon']}} text-primary h1 mb-0"></i>

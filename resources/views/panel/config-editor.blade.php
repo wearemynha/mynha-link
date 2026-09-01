@@ -14,7 +14,7 @@
                   @if(request()->server('QUERY_STRING', '') == '')
                   
                   <div id="exTab2" class="">
-                      <ul id="myTab" class="nav nav-tabs">
+                      <ul id="myTab" class="nav nav-tabs mynha-admin-tabs">
                         <li class="nav-item"><a class="nav-link active" href="#1" data-toggle="tab" id="home-tab">{{__('messages.Config')}}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#2" data-toggle="tab" id="advanced-tab">{{__('messages.Advanced Config')}}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#3" data-toggle="tab" id="backup-tab">{{__('messages.Take Backup')}}</a></li>

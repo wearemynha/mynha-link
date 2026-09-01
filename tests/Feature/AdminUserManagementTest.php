@@ -38,11 +38,15 @@ class AdminUserManagementTest extends TestCase
             ->assertOk();
 
         $usersHtml = $usersResponse->getContent();
-        $livewireScriptPosition = strpos($usersHtml, 'livewire/livewire');
+        $livewireScriptPosition = preg_match('~/livewire/livewire(?:\\.min)?\\.js~', $usersHtml, $matches, PREG_OFFSET_CAPTURE)
+            ? $matches[0][1] : false;
         $sortableScriptPosition = strpos($usersHtml, 'assets/js/livewire-sortable.js');
 
         $this->assertNotFalse($livewireScriptPosition);
         $this->assertNotFalse($sortableScriptPosition);
+        $this->assertStringContainsString('class="mynha-dashboard"', $usersHtml);
+        $this->assertStringContainsString('assets/mynha-assets/mynha.css', $usersHtml);
+        $this->assertStringContainsString('class="mynha-user-table"', $usersHtml);
         $this->assertLessThan($sortableScriptPosition, $livewireScriptPosition);
 
         $this->actingAs($admin)
@@ -59,6 +63,7 @@ class AdminUserManagementTest extends TestCase
         $this->actingAs($admin)
             ->get(route('showConfig'))
             ->assertOk()
+            ->assertSee('class="nav nav-tabs mynha-admin-tabs"', false)
             ->assertSee('custom_url_prefix');
 
         $this->actingAs($admin)

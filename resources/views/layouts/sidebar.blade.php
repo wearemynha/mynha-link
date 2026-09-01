@@ -2,6 +2,9 @@
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\User;
 $usrhandl = Auth::user()->littlelink_name;
+// Every authenticated panel page extends this layout, so the Mynha skin must
+// remain active while navigating between dashboard, studio and admin routes.
+$mynhaDashboard = true;
 @endphp
 <!doctype html>
 @include('layouts.lang')
@@ -11,7 +14,9 @@ $usrhandl = Auth::user()->littlelink_name;
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <title>{{config('app.name')}}</title>
 
+      @unless($mynhaDashboard)
       <script src="{{asset('assets/js/detect-dark-mode.js')}}"></script>
+      @endunless
       
       <base href="{{url()->current()}}" />
 
@@ -28,7 +33,9 @@ $usrhandl = Auth::user()->littlelink_name;
     @endphp
 
       <!-- Favicon -->
-      @if(file_exists(base_path("assets/linkstack/images/").findFile('favicon')))
+      @if($mynhaDashboard)
+      <link rel="icon" type="image/svg+xml" href="{{ asset('assets/mynha-assets/mynha-icon-preto-verde.svg') }}">
+      @elseif(file_exists(base_path("assets/linkstack/images/").findFile('favicon')))
       <link rel="icon" type="image/png" href="{{ asset('assets/linkstack/images/'.findFile('favicon')) }}">
       @else
       <link rel="icon" type="image/svg+xml" href="{{ asset('assets/linkstack/images/logo.svg') }}">
@@ -40,7 +47,9 @@ $usrhandl = Auth::user()->littlelink_name;
       <!-- Aos Animation Css -->
       <link rel="stylesheet" href="{{asset('assets/vendor/aos/dist/aos.css')}}" />
       
+      @unless($mynhaDashboard)
       @include('layouts.fonts')
+      @endunless
       
       <!-- Hope Ui Design System Css -->
       <link rel="stylesheet" href="{{asset('assets/css/hope-ui.min.css?v=2.0.0')}}" />
@@ -49,6 +58,7 @@ $usrhandl = Auth::user()->littlelink_name;
       <link rel="stylesheet" href="{{asset('assets/css/custom.min.css?v=2.0.0')}}" />
       
       <!-- Dark Css -->
+      @unless($mynhaDashboard)
       <link rel="stylesheet" href="{{asset('assets/css/dark.min.css')}}" />
       
       <!-- Customizer Css -->
@@ -57,6 +67,7 @@ $usrhandl = Auth::user()->littlelink_name;
       @else
       <link rel="stylesheet" href="{{asset('assets/css/customizer.min.css')}}" />
       @endif
+      @endunless
       
       <!-- RTL Css -->
       <link rel="stylesheet" href="{{asset('assets/css/rtl.min.css')}}" />
@@ -67,9 +78,12 @@ $usrhandl = Auth::user()->littlelink_name;
 	  <link rel="stylesheet" href="{{ asset('assets/external-dependencies/bootstrap-icons.css') }}">
 
       @livewireStyles
+      @if($mynhaDashboard)
+      <link rel="stylesheet" href="{{ asset('assets/mynha-assets/mynha.css') }}">
+      @endif
 
   </head>
-  <body class="  ">
+  <body class="{{ $mynhaDashboard ? 'mynha-dashboard' : '' }}">
     <!-- loader Start -->
     <div id="loading">
       <div class="loader simple-loader">
@@ -83,7 +97,9 @@ $usrhandl = Auth::user()->littlelink_name;
                 
                 <!--Logo start-->
                 <div class="logo-main">
-                @if(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
+                @if($mynhaDashboard)
+                  <img class="img logo" src="{{ asset('assets/mynha-assets/mynha-icon-preto-verde.svg') }}" alt="Mynha" width="36" height="36">
+                @elseif(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
                 <div class="logo-normal">
                   <img class="img logo" src="{{ asset('assets/linkstack/images/'.findFile('avatar')) }}" style="width:auto;height:30px;">
               </div>
@@ -241,7 +257,9 @@ $usrhandl = Auth::user()->littlelink_name;
                 
                 <!--Logo start-->
                 <div class="logo-main">
-                  @if(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
+                  @if($mynhaDashboard)
+                    <img class="img logo" src="{{ asset('assets/mynha-assets/mynha-icon-preto-verde.svg') }}" alt="Mynha" width="36" height="36">
+                  @elseif(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
                   <div class="logo-normal">
                     <img class="img logo" src="{{ asset('assets/linkstack/images/'.findFile('avatar')) }}" style="width:auto;height:30px;">
                 </div>
@@ -346,7 +364,7 @@ $usrhandl = Auth::user()->littlelink_name;
           @elseif(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
           <img src="{{ url("assets/linkstack/images/")."/".findFile('avatar') }}" alt="User-Profile" class="img logo" style="width:auto;height:30px;">
 					@else
-					<img src="{{ asset('assets/linkstack/images/logo.svg') }}" alt="User-Profile" class="img-fluid avatar avatar-40 avatar-rounded">
+					<img src="{{ asset($mynhaDashboard ? 'assets/mynha-assets/mynha-icon-preto-verde.svg' : 'assets/linkstack/images/logo.svg') }}" alt="User-Profile" class="img-fluid avatar avatar-40 avatar-rounded">
 					@endif
                     <div class="caption ms-3 d-none d-md-block ">
                         <h6 class="mb-0 caption-title">{{Auth::user()->name}}</h6>
@@ -364,7 +382,9 @@ $usrhandl = Auth::user()->littlelink_name;
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ url('/studio/page') }}"><i class="bi bi-person-fill"></i> {{__('messages.Profile')}}</a></li>
                     <li><a class="dropdown-item" href="{{ url('/studio/profile') }}"><i class="bi bi-gear-fill"></i> {{__('messages.Settings')}}</a></li>
+                    @unless($mynhaDashboard)
                     <li><a class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" role="button" aria-controls="offcanvasExample"><i class="bi bi-brush-fill"></i> {{__('messages.Styling')}}</a></li>
+                    @endunless
                     <li><hr class="dropdown-divider"></li>
                     <li>
 					<form action="{{ route('logout') }}" method="post">
@@ -386,12 +406,12 @@ $usrhandl = Auth::user()->littlelink_name;
                           <div style="z-index:5;position:relative;" class="flex-wrap d-flex justify-content-between align-items-center">
                               <div>
                                 @if(!isset($usrhandl))
-                                  <h1>👋 {{__('messages.Hi')}}, {{__('messages.stranger')}}</h1>
+                                  <h1 class="mynha-dashboard-greeting">👋 {{__('messages.Hi')}}, {{__('messages.stranger')}}</h1>
                                 @else
-                                  <h1>👋 {{__('messages.Hi')}}, {{'@'.$usrhandl}}</h1>
+                                  <h1 class="mynha-dashboard-greeting">👋 {{__('messages.Hi')}}, {{'@'.$usrhandl}}</h1>
                                 @endif
 
-                                  <h5>{{__('messages.welcome', ['appName' => config('app.name')])}}</h5>
+                                  <h5 class="mynha-dashboard-welcome">{{__('messages.welcome', ['appName' => config('app.name')])}}</h5>
                               </div>
                               <div>
                                 @if(!isset($usrhandl))
@@ -438,7 +458,7 @@ $usrhandl = Auth::user()->littlelink_name;
                       <svg class="icon-15" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M15.85 2.50065C16.481 2.50065 17.111 2.58965 17.71 2.79065C21.401 3.99065 22.731 8.04065 21.62 11.5806C20.99 13.3896 19.96 15.0406 18.611 16.3896C16.68 18.2596 14.561 19.9196 12.28 21.3496L12.03 21.5006L11.77 21.3396C9.48102 19.9196 7.35002 18.2596 5.40102 16.3796C4.06102 15.0306 3.03002 13.3896 2.39002 11.5806C1.26002 8.04065 2.59002 3.99065 6.32102 2.76965C6.61102 2.66965 6.91002 2.59965 7.21002 2.56065H7.33002C7.61102 2.51965 7.89002 2.50065 8.17002 2.50065H8.28002C8.91002 2.51965 9.52002 2.62965 10.111 2.83065H10.17C10.21 2.84965 10.24 2.87065 10.26 2.88965C10.481 2.96065 10.69 3.04065 10.89 3.15065L11.27 3.32065C11.3618 3.36962 11.4649 3.44445 11.554 3.50912C11.6104 3.55009 11.6612 3.58699 11.7 3.61065C11.7163 3.62028 11.7329 3.62996 11.7496 3.63972C11.8354 3.68977 11.9247 3.74191 12 3.79965C13.111 2.95065 14.46 2.49065 15.85 2.50065ZM18.51 9.70065C18.92 9.68965 19.27 9.36065 19.3 8.93965V8.82065C19.33 7.41965 18.481 6.15065 17.19 5.66065C16.78 5.51965 16.33 5.74065 16.18 6.16065C16.04 6.58065 16.26 7.04065 16.68 7.18965C17.321 7.42965 17.75 8.06065 17.75 8.75965V8.79065C17.731 9.01965 17.8 9.24065 17.94 9.41065C18.08 9.58065 18.29 9.67965 18.51 9.70065Z" fill="currentColor"></path>
                       </svg>
-                  </span> {{__('messages.by')}} <a href="https://linkstack.org/" target="_blank">LinkStack</a>.
+                  </span> {{__('messages.by')}} <a href="https://mynha.com.br/" target="_blank" rel="noopener noreferrer">Mynha</a>.
                 @endif
               </div>
           </div>
@@ -671,7 +691,9 @@ $usrhandl = Auth::user()->littlelink_name;
     <script src="{{asset('assets/js/plugins/fslightbox.js')}}"></script>
     
     <!-- Settings Script -->
+    @unless($mynhaDashboard)
     <script src="{{asset('assets/js/plugins/setting.js')}}"></script>
+    @endunless
     
     <!-- Slider-tab Script -->
     <script src="{{asset('assets/js/plugins/slider-tabs.js')}}"></script>
