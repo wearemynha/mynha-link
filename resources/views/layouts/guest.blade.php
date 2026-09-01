@@ -1,3 +1,6 @@
+@if ($attributes->get('brand') === 'mynha')
+    @include('layouts.mynha-guest')
+@else
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -95,3 +98,4 @@
     <script src="{{asset('assets/js/plugins/prism.mini.js')}}"></script>
 
 </html>
+@endif

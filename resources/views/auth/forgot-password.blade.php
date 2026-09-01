@@ -1,65 +1,25 @@
-<?php
-$pages = DB::table('pages')->get();
-foreach($pages as $page)
-{
-	//Gets value from database
-}
-?>
+<x-guest-layout brand="mynha">
+    <section class="mynha-auth-card" aria-labelledby="forgot-password-heading">
+        <a href="{{ url('') }}" class="mynha-auth-brand">
+            <img src="{{ asset('assets/mynha-assets/mynha-icon-preto-verde.svg') }}" alt="" width="48" height="48">
+            <span>{{ config('app.name') }}</span>
+        </a>
 
-<x-guest-layout>
-@include('layouts.lang')
+        <h1 id="forgot-password-heading" class="mynha-auth-heading">{{ __('messages.Forgot your password?') }}</h1>
+        <p class="mynha-auth-description">{{ __('messages.No problem') }}</p>
 
-    <x-auth-card>
-        <x-slot name="logo"></x-slot>
+        <x-auth-session-status class="mynha-auth-notice" role="status" :status="session('status')" />
+        <x-auth-validation-errors class="mynha-auth-notice" role="alert" :errors="$errors" />
 
-        <div class="container mt-5 w-75">
-            <div style="max-width:480px" class="container mt-5 w-100">
-              <a href="{{ url('') }}" class="d-flex align-items-center mb-3">
-                <!--Logo start-->
-                <div class="logo-main">
-                    @if(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
-                    <div class="logo-normal">
-                      <img class="img logo" src="{{ asset('assets/linkstack/images/'.findFile('avatar')) }}" style="width:auto;height:30px;">
-                  </div>
-                  <div class="logo-mini">
-                    <img class="img logo" src="{{ asset('assets/linkstack/images/'.findFile('avatar')) }}" style="width:auto;height:30px;">
-                  </div>
-                    @else
-                    <div class="logo-normal">
-                      <img class="img logo" type="image/svg+xml" src="{{ asset('assets/linkstack/images/logo.svg') }}" width="30px" height="30px">
-                  </div>
-                  <div class="logo-mini">
-                    <img class="img logo" type="image/svg+xml" src="{{ asset('assets/linkstack/images/logo.svg') }}" width="30px" height="30px">
-                  </div>
-                    @endif
-                    </div>
-                    <!--logo End-->
-                <h4 class="logo-title ms-3">{{config('app.name')}}</h4>
-              </a>
-              <h2 class="mb-2 text-center">{{__('messages.Forgot your password?')}}</h2>
-              <p class="text-center">{{__('messages.No problem')}}</p>
-              <form method="POST" action="{{ route('password.email') }}" class="row">
-                @csrf
-            
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-0 alert alert-success pb-2" role="alert" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-0 alert alert-success pb-2" role="alert" :errors="$errors" />
-
-                <!-- Email Address -->
-                <div class="col-lg-12 form-group pb-2">
-                    <label for="email" class="form-label">{{__('messages.Email')}}</label>
-            
-                    <input id="email" class="form-control" type="email" name="email" :value="old('email')" placeholder=" " required autofocus />
-                </div>
-            
-                <div class="col-lg-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">{{__('messages.Email Password Reset Link')}}</button>
-                </div>
-            </form>
+        <form method="POST" action="{{ route('password.email') }}">
+            @csrf
+            <x-mynha.field for="email" :label="__('messages.Email')" :error="$errors->first('email')">
+                <x-mynha.input id="email" type="email" name="email" :value="old('email')"
+                               :invalid="$errors->has('email')" required autofocus autocomplete="email" />
+            </x-mynha.field>
+            <div class="mynha-auth-actions">
+                <x-mynha.button type="submit">{{ __('messages.Email Password Reset Link') }}</x-mynha.button>
             </div>
-          </div>            
-
-    </x-auth-card>
+        </form>
+    </section>
 </x-guest-layout>
