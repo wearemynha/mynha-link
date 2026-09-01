@@ -1,4 +1,6 @@
-<?php use App\Models\UserData; ?>
+@if (in_array(config('advanced-config.home_theme'), [null, '', 'default'], true))
+    @include('demo-mynha')
+@else
 
 <!DOCTYPE html>
 @include('layouts.lang')
@@ -155,3 +157,4 @@
 
 </body>
 </html>
+@endif

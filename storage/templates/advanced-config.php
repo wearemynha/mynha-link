@@ -143,25 +143,25 @@ return [
 
     'buttons' => array(
       array(
-        'button' => 'github',
-        'link' => 'https://github.com/linkstackorg/linkstack',
-        'title' => 'GitHub',
-        'icon' => '',
-        'custom_css' => ''
+        'button' => 'custom',
+        'link' => 'https://mynha.com.br/',
+        'title' => 'Mynha',
+        'icon' => 'fa-globe',
+        'custom_css' => 'color:#000000; background:#8DC048;'
       ),
       array(
-        'button' => 'linkstack',
-        'link' => 'https://linkstack.org',
-        'title' => 'Project Website',
+        'button' => 'instagram',
+        'link' => 'https://www.instagram.com/wearemynha/',
+        'title' => 'Instagram',
         'icon' => '',
         'custom_css' => ''
       ),
       array(
         'button' => 'custom',
-        'link' => 'https://linkstack.org/donate',
-        'title' => 'Help us out',
-        'icon' => 'fa-hand-holding-heart',
-        'custom_css' => 'color:#ffffff; background-image:radial-gradient(circle, #4b1977 0%, #2b0081 95%);'
+        'link' => 'https://docs.google.com/forms/d/e/1FAIpQLScYqsSq8IhLNsY-JD0U1frGohndQEBk9uOh_MgRWjEDZmFe0w/viewform',
+        'title' => 'Quer ser nosso Designer?',
+        'icon' => 'fa-pen-nib',
+        'custom_css' => 'color:#DDDFCF; background:#848948;'
       ),
     ),
 
