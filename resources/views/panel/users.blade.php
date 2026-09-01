@@ -34,7 +34,9 @@
                           </button>
                         </div>
 
-                        <livewire:user-table />
+                        <div class="mynha-user-table">
+                          <livewire:user-table />
+                        </div>
                         
                         <a href="{{ url('') }}/admin/new-user">+ {{__('messages.Add new user')}}</a>
                         

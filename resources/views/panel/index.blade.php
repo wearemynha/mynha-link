@@ -1,179 +1,75 @@
 @extends('layouts.sidebar')
 
-
 @section('content')
-<div class="conatiner-fluid content-inner mt-n5 py-0">
-    <div class="row">   
-        
-     <div class="col-lg-12">
-        <div class="card   rounded">
-            <div class="card-body">
-               <div class="row">
-                   <div class="col-sm-12">  
+<div class="container-fluid content-inner mynha-dashboard-content">
+    <x-mynha.page-header class="mynha-dashboard-title" icon="bi-menu-up" :title="__('messages.Dashboard')" />
 
-                    <h3 class="mb-4"><i class="bi bi-menu-up"></i> {{__('messages.Dashboard')}}</h3>
-                    
-                            <section class="mb-3 text-center p-4 w-full">
-                                <div class=" d-flex">
-                    
-                                    <div class='p-2 h6'><i class="bi bi-link"></i> {{__('messages.Total Links:')}} <span class='text-primary'>{{ $links }} </span></div>
-                    
-                                    <div class='p-2 h6'><i class="bi bi-eye"></i> {{__('messages.Link Clicks:')}} <span class='text-primary'>{{ $clicks }}</span></div>
-                                </div>
-                                <div class='text-center w-100'>
-                                    <a href="{{ url('/studio/links') }}">{{__('messages.View/Edit Links')}}</a>
-                    
-                                </div>
-                                <div class='w-100 text-left'>
-                                    <h6><i class="bi bi-sort-up"></i> {{__('messages.Top Links:')}}</h6>
-                    
-                                                    @php $i = 0; @endphp
-                    
+    <div class="mynha-stat-grid mynha-stat-grid-two">
+        @include('components.dashboard-stat', ['label' => __('messages.Total Links:'), 'value' => $links, 'icon' => 'bi-link'])
+        @include('components.dashboard-stat', ['label' => __('messages.Link Clicks:'), 'value' => $clicks, 'icon' => 'bi-eye'])
+    </div>
 
-                                                    <div class="bd-example" >
-                                                        <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                          @if($toplinks == "[]")
-                                                          <div class="container">
-                                                            <div class="row justify-content-center mt-3">
-                                                              <div class="col-6 text-center">
-                                                                <p class="p-2">{{__('messages.You haven’t added any links yet')}}</p>
-                                                              </div>
-                                                            </div>
-                                                          </div>                                                        
-                                                          @else
-                                                          @foreach($toplinks as $link)
-                                                            @php $linkName = str_replace('default ','',$link->name) @endphp
-                                                            @php  $i++; @endphp
-                                                      
-                                                            @if($link->name !== "phone" && $link->name !== 'heading' && $link->button_id !== 96)
-                                                              <li class="list-group-item d-flex justify-content-between align-items-start">
-                                                                <div class="ms-2 me-auto text-truncate">
-                                                                  <div class="fw-bold text-truncate">{{ $link->title }}</div>
-                                                                  {{ $link->link }}
-                                                                </div>
-                                                                <span class="badge bg-primary rounded-pill p-2">{{ $link->click_number }} - {{__('messages.clicks')}}</span>
-                                                              </li>
-                                                            @endif
-                                                          @endforeach
-                                                          @endif
-                                                        </ol>
-                                                      </div>
-
-                            </section>
-
-                   </div>
-               </div>
+    <section class="card mynha-dashboard-links" aria-labelledby="top-links-heading">
+        <div class="card-body">
+            <div class="mynha-dashboard-section-heading">
+                <h3 id="top-links-heading">{{ __('messages.Top Links:') }}</h3>
+                <a class="btn btn-primary" href="{{ url('/studio/links') }}">{{ __('messages.View/Edit Links') }}</a>
             </div>
-         </div>
+            @php
+                $visibleTopLinks = $toplinks->filter(fn ($link) => $link->name !== 'phone' && $link->name !== 'heading' && $link->button_id !== 96);
+            @endphp
+            @if($visibleTopLinks->isEmpty())
+                <x-mynha.empty-state class="mynha-dashboard-empty">
+                    <p>{{ __('messages.You haven’t added any links yet') }}</p>
+                </x-mynha.empty-state>
+            @else
+                <ol class="list-group list-group-numbered">
+                    @foreach($visibleTopLinks as $link)
+                        <li class="list-group-item d-flex align-items-center gap-3">
+                            <div class="mynha-dashboard-link-info">
+                                <strong>{{ $link->title }}</strong>
+                                <span>{{ $link->link }}</span>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">{{ $link->click_number }} — {{ __('messages.clicks') }}</span>
+                        </li>
+                    @endforeach
+                </ol>
+            @endif
         </div>
+    </section>
 
-       <div class="col-lg-12">
-          <div class="card   rounded">
-             <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-12">  
-
-@if(auth()->user()->role == 'admin' && !config('linkstack.single_user_mode'))
-        <!-- Section: Design Block -->
-        <section class="mb-3 text-gray-800 text-center p-4 w-full">
-            <div class='font-weight-bold text-left h3'>{{__('messages.Site statistics:')}}</div><br>
-            <div class="d-flex flex-wrap justify-content-around">
-
-                <div class="p-2">
-                    <h3 class="text-primary"><strong><i class="bi bi-share-fill"> {{ $siteLinks }} </i></strong></h3>
-                    <span class="text-muted">{{__('messages.Total links')}}</span>
-                </div>
-
-                <div class="p-2">
-                    <h3 class="text-primary"><strong><i class="bi bi-eye-fill"> {{ $siteClicks }} </i></strong></h3>
-                    <span class="text-muted">{{__('messages.Total clicks')}}</span>
-                </div>
-
-                <div class="p-2">
-                    <h3 class="text-primary"><strong><i class="bi bi bi-person-fill"> {{ $userNumber }}</i></strong></h3>
-                    <span class="text-muted">{{__('messages.Total users')}}</span>
-                </div>
-
+    @if(auth()->user()->role === 'admin' && !config('linkstack.single_user_mode'))
+        <section aria-labelledby="site-statistics-heading">
+            <h3 id="site-statistics-heading">{{ __('messages.Site statistics:') }}</h3>
+            <div class="mynha-stat-grid">
+                @include('components.dashboard-stat', ['label' => __('messages.Total links'), 'value' => $siteLinks, 'icon' => 'bi-share'])
+                @include('components.dashboard-stat', ['label' => __('messages.Total clicks'), 'value' => $siteClicks, 'icon' => 'bi-eye'])
+                @include('components.dashboard-stat', ['label' => __('messages.Total users'), 'value' => $userNumber, 'icon' => 'bi-people'])
             </div>
         </section>
 
-                    </div>
+        <div class="mynha-stat-grid mynha-stat-grid-two">
+            <section class="card" aria-labelledby="registrations-heading">
+                <div class="card-body">
+                    <h3 id="registrations-heading">{{ __('messages.Registrations:') }}</h3>
+                    <dl class="mynha-dashboard-periods">
+                        <div><dt>{{ __('messages.Last 30 days') }}</dt><dd>{{ $lastMonthCount }}</dd></div>
+                        <div><dt>{{ __('messages.Last 7 days') }}</dt><dd>{{ $lastWeekCount }}</dd></div>
+                        <div><dt>{{ __('messages.Last 24 hours') }}</dt><dd>{{ $last24HrsCount }}</dd></div>
+                    </dl>
                 </div>
-             </div>
-          </div>
-       </div>       
-       
-       <div class="col-lg-12">
-        <div class="card   rounded">
-           <div class="card-body">
-              <div class="row">
-                  <div class="col-sm-12">  
-
-      <!-- Section: Design Block -->
-      <section class="mb-3 text-gray-800 text-center p-4 w-full">
-          <div class='font-weight-bold text-left h3'>{{__('messages.Registrations:')}}</div><br>
-          <div class="d-flex flex-wrap justify-content-around">
-
-              <div class="p-2">
-                  <h3 class="text-primary"><strong> {{ $lastMonthCount }} </i></strong></h3>
-                  <span class="text-muted">{{__('messages.Last 30 days')}}</span>
-              </div>
-
-              <div class="p-2">
-                  <h3 class="text-primary"><strong> {{ $lastWeekCount }} </i></strong></h3>
-                  <span class="text-muted">{{__('messages.Last 7 days')}}</span>
-              </div>
-
-              <div class="p-2">
-                  <h3 class="text-primary"><strong> {{ $last24HrsCount }}</i></strong></h3>
-                  <span class="text-muted">{{__('messages.Last 24 hours')}}</span>
-              </div>
-
-          </div>
-      </section>
-
-                  </div>
-              </div>
-           </div>
+            </section>
+            <section class="card" aria-labelledby="active-users-heading">
+                <div class="card-body">
+                    <h3 id="active-users-heading">{{ __('messages.Active users:') }}</h3>
+                    <dl class="mynha-dashboard-periods">
+                        <div><dt>{{ __('messages.Last 30 days') }}</dt><dd>{{ $updatedLast30DaysCount }}</dd></div>
+                        <div><dt>{{ __('messages.Last 7 days') }}</dt><dd>{{ $updatedLast7DaysCount }}</dd></div>
+                        <div><dt>{{ __('messages.Last 24 hours') }}</dt><dd>{{ $updatedLast24HrsCount }}</dd></div>
+                    </dl>
+                </div>
+            </section>
         </div>
-     </div>   
-
-     <div class="col-lg-12">
-        <div class="card   rounded">
-           <div class="card-body">
-              <div class="row">
-                  <div class="col-sm-12">  
-
-
-      <!-- Section: Design Block -->
-      <section class="mb-3 text-gray-800 text-center p-4 w-full">
-          <div class='font-weight-bold text-left h3'>{{__('messages.Active users:')}}</div><br>
-          <div class="d-flex flex-wrap justify-content-around">
-
-              <div class="p-2">
-                  <h3 class="text-primary"><strong> {{ $updatedLast30DaysCount }} </i></strong></h3>
-                  <span class="text-muted">{{__('messages.Last 30 days')}}</span>
-              </div>
-
-              <div class="p-2">
-                  <h3 class="text-primary"><strong> {{ $updatedLast7DaysCount }} </i></strong></h3>
-                  <span class="text-muted">{{__('messages.Last 7 days')}}</span>
-              </div>
-
-              <div class="p-2">
-                  <h3 class="text-primary"><strong> {{ $updatedLast24HrsCount }}</i></strong></h3>
-                  <span class="text-muted">{{__('messages.Last 24 hours')}}</span>
-              </div>
-
-          </div>
-      </section>
-                  </div>
-              </div>
-           </div>
-        </div>
-     </div>   
-     @endif
-
-    </div>
-    </div>
+    @endif
+</div>
 @endsection
