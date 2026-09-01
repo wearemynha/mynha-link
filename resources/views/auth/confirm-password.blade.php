@@ -1,36 +1,23 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="{{ url('') }}">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<x-guest-layout brand="mynha">
+    <section class="mynha-auth-card" aria-labelledby="confirm-password-heading">
+        <a href="{{ url('') }}" class="mynha-auth-brand">
+            <img src="{{ asset('assets/mynha-assets/mynha-icon-preto-verde.svg') }}" alt="" width="48" height="48">
+            <span>{{ config('app.name') }}</span>
+        </a>
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{__('messages.auth_password')}}
-        </div>
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <h1 id="confirm-password-heading" class="mynha-auth-heading">{{ __('messages.Confirm') }}</h1>
+        <p class="mynha-auth-description">{{ __('messages.auth_password') }}</p>
+        <x-auth-validation-errors class="mynha-auth-notice" role="alert" :errors="$errors" />
 
         <form method="POST" action="{{ route('password.confirm') }}">
             @csrf
-
-            <!-- Password -->
-            <div>
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <x-button>
-                    {{__('messages.Confirm')}}
-                </x-button>
+            <x-mynha.field for="password" :label="__('messages.Password')" :error="$errors->first('password')">
+                <x-password-field id="password" name="password" :invalid="$errors->has('password')"
+                                  required autocomplete="current-password" />
+            </x-mynha.field>
+            <div class="mynha-auth-actions">
+                <x-mynha.button type="submit">{{ __('messages.Confirm') }}</x-mynha.button>
             </div>
         </form>
-    </x-auth-card>
+    </section>
 </x-guest-layout>
