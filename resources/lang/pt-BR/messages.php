@@ -8,6 +8,8 @@
  */
 
 return array(
+    'Show password' => 'Exibir senha',
+    'Hide password' => 'Ocultar senha',
 
 	/*
 		    |--------------------------------------------------------------------------
@@ -27,7 +29,7 @@ return array(
 	'by' => 'por',
 
 	'HOME.MESSAGE' => '
-     <p>Tome o controle de sua presença online com <a href="https://linkstack.org/"><strong>LinkStack</strong></a>,
+     <p>Tome o controle de sua presença online com Mynha Link,
      uma <strong>plataforma de gerenciamento de links</strong> de código aberto e voltada para a privacidade. Crie uma página de perfil personalizável para gerenciar <strong>
      todos os seus links importantes em um local conveniente</strong> e ofereça ao seu público uma experiência de navegação perfeita.</p>
   ',
@@ -705,10 +707,10 @@ return array(
  */
 
 # Title Tag
-	'LinkStack setup' => 'Configuração do LinkStack',
+	'LinkStack setup' => 'Configuração do Mynha Link',
 
-	'Setup LinkStack' => 'Configuração do LinkStack',
-	'Welcome to the setup for LinkStack!' => 'Vamos à configuração do LinkStack!',
+	'Setup LinkStack' => 'Configuração do Mynha Link',
+	'Welcome to the setup for LinkStack!' => 'Vamos à configuração do Mynha Link!',
 	'This setup will:' => 'Essa configuração irá:',
 	'Check the server dependencies' => 'Verificar as dependências do servidor',
 	'Setup the database' => 'Configurar o banco de dados',

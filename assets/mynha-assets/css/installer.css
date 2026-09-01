@@ -1,0 +1,62 @@
+.mynha-installer .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100%, var(--mynha-content-md));
+    min-height: 100vh;
+    margin-inline: auto;
+    padding: var(--mynha-space-12) var(--mynha-space-6);
+    text-align: center;
+}
+
+.mynha-installer .logo-container { margin-bottom: var(--mynha-space-5); }
+
+.mynha-installer .logo-img {
+    display: block;
+    width: min(18.75rem, 100%);
+    height: auto;
+}
+
+.mynha-installer h1 {
+    margin: 0 0 var(--mynha-space-6);
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+}
+
+.mynha-installer p { margin: 0 0 var(--mynha-space-6); }
+.mynha-installer .inst-txt { font-size: var(--mynha-font-size-lg); }
+
+.mynha-installer .glass-container {
+    width: 100%;
+    margin-bottom: 1.75rem;
+    text-align: left;
+}
+
+.mynha-installer .installer-welcome,
+.mynha-installer #language-form {
+    max-width: var(--mynha-content-sm);
+}
+
+.mynha-installer form { width: 100%; }
+.mynha-installer .form-group { width: 100%; text-align: left; }
+
+.mynha-installer .installer-disclaimer {
+    max-width: var(--mynha-content-sm);
+    margin: var(--mynha-space-1) 0 1.75rem;
+    font-size: var(--mynha-font-size-sm);
+}
+
+.mynha-installer table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mynha-installer td { padding: var(--mynha-space-1) 0; }
+.mynha-installer td:last-child { text-align: end; }
+.mynha-installer :is(.bi-check-lg, .bi-x-lg) { color: var(--mynha-color-text); }
+.mynha-installer .installer-dependency-note { display: flex; margin-bottom: var(--mynha-space-1); font-size: 90%; }
+.mynha-installer .installer-hidden-field { display: none; }
+
+@media (max-width: 30rem) {
+    .mynha-installer .container { padding: var(--mynha-space-6) var(--mynha-space-5); }
+    .mynha-installer .glass-container { padding: var(--mynha-space-5); }
+}

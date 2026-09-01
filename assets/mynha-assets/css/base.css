@@ -1,0 +1,63 @@
+.mynha-ui {
+    margin: 0;
+    min-height: 100vh;
+    color-scheme: light;
+    color: var(--mynha-color-text);
+    background: var(--mynha-color-page);
+    font-family: var(--mynha-font-secondary);
+    font-size: var(--mynha-font-size-md);
+    line-height: var(--mynha-line-height);
+}
+
+.mynha-ui *,
+.mynha-ui *::before,
+.mynha-ui *::after {
+    box-sizing: border-box;
+}
+
+.mynha-ui :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--mynha-color-text);
+    font-family: var(--mynha-font-primary);
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.mynha-ui a {
+    color: var(--mynha-color-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.mynha-ui a:hover {
+    text-decoration-thickness: 2px;
+}
+
+.mynha-ui :is(a, button, input, select, textarea):focus-visible {
+    outline: 2px solid var(--mynha-color-focus);
+    outline-offset: 3px;
+}
+
+.mynha-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.mynha-stack {
+    display: grid;
+    gap: var(--mynha-space-4);
+}
+
+.mynha-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mynha-space-3);
+}

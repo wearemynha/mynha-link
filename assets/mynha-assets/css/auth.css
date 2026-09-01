@@ -1,0 +1,145 @@
+.mynha-auth-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: var(--mynha-space-8) var(--mynha-space-4);
+}
+
+.mynha-auth-card {
+    width: 100%;
+    max-width: 30rem;
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    border-radius: var(--mynha-radius-lg);
+    box-shadow: var(--mynha-shadow-md);
+}
+
+.mynha-auth-card--wide { max-width: 35rem; }
+
+.mynha-ui .mynha-auth-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.875rem;
+    margin-bottom: var(--mynha-space-6);
+    font-family: var(--mynha-font-primary);
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+.mynha-auth-brand img {
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+}
+
+.mynha-auth-heading {
+    margin: 0 0 var(--mynha-space-3);
+    text-align: center;
+    font-size: 2.125rem;
+}
+
+.mynha-auth-description {
+    margin: 0 0 var(--mynha-space-6);
+    text-align: center;
+}
+
+.mynha-auth-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mynha-space-3);
+    margin-bottom: var(--mynha-space-6);
+}
+
+.mynha-ui .mynha-auth-remember {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mynha-space-2);
+    margin: 0;
+}
+
+.mynha-auth-remember input {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    accent-color: var(--mynha-color-action-hover);
+}
+
+.mynha-auth-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.mynha-auth-footer {
+    margin: var(--mynha-space-6) 0 0;
+    text-align: center;
+}
+
+.mynha-auth-social {
+    display: flex;
+    justify-content: center;
+    gap: var(--mynha-space-5);
+    padding: 0;
+    list-style: none;
+}
+
+.mynha-auth-social a {
+    display: inline-flex;
+    padding: var(--mynha-space-2);
+    font-size: 1.5rem;
+}
+
+.mynha-auth-notice { margin-bottom: var(--mynha-space-5); }
+
+.mynha-auth-url-field {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: stretch;
+}
+
+.mynha-auth-url-field > span {
+    display: flex;
+    align-items: center;
+    max-width: 13.75rem;
+    padding: 0.625rem var(--mynha-space-3);
+    border: 1px solid var(--mynha-color-border);
+    border-inline-end: 0;
+    border-radius: var(--mynha-radius-md) 0 0 var(--mynha-radius-md);
+    background: var(--mynha-color-surface);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mynha-ui .mynha-auth-url-field :is(.form-control, .mynha-input) {
+    margin: 0;
+    border-radius: 0 var(--mynha-radius-md) var(--mynha-radius-md) 0;
+}
+
+.mynha-auth-url-field .invalid-feedback {
+    grid-column: 1 / -1;
+    margin-top: 0.375rem;
+}
+
+.mynha-ui .mynha-auth-register-remember {
+    margin: 0 0 var(--mynha-space-6);
+}
+
+@media (max-width: 32.5rem) {
+    .mynha-auth-url-field { grid-template-columns: minmax(0, 1fr); }
+    .mynha-auth-url-field > span {
+        max-width: none;
+        border-inline-end: 1px solid var(--mynha-color-border);
+        border-bottom: 0;
+        border-radius: var(--mynha-radius-md) var(--mynha-radius-md) 0 0;
+    }
+    .mynha-ui .mynha-auth-url-field :is(.form-control, .mynha-input) {
+        border-radius: 0 0 var(--mynha-radius-md) var(--mynha-radius-md);
+    }
+}

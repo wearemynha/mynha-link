@@ -7,6 +7,8 @@
     */
 
 return array (
+    'Show password' => 'Mostrar contraseña',
+    'Hide password' => 'Ocultar contraseña',
 
     /*
     |--------------------------------------------------------------------------
@@ -16,17 +18,17 @@ return array (
     | resources/views/home.blade.php
     |
     */
-    
+
   'Log in' => 'Iniciar sesión',
   'Register' => 'Crear una cuenta',
-    
+
   'Dashboard' => 'Tablero de control',
   'Copyright' => 'Derechos de autor',
   'Made with' => 'Hecho con',
   'by' => 'por',
 
   'HOME.MESSAGE' => '
-  <p>Controla tu presencia en línea con&nbsp;<a href="https://linkstack.org/"><strong>LinkStack</strong></a>,
+  <p>Controla tu presencia en línea con&nbsp;Mynha Link,
    la plataforma de gestión de enlaces <strong>open-source</strong> centrada en la privacidad. Crea una página de perfil personalizable para gestionar <strong>
    todos tus enlaces importantes en un solo lugar</strong> y ofrece a tu público una experiencia de navegación transparente.</p>
   ',
@@ -39,7 +41,7 @@ return array (
     | resources/views/demo.blade.php
     |
     */
-    
+
   'Example page' => 'Página de ejemplo',
 
     /*
@@ -77,7 +79,7 @@ return array (
   'Already have an account?' => '¿Ya tienes una cuenta?',
   'Click here to sign in' => 'Haz clic aquí para iniciar sesión',
 
-    # Verificación pendiente por administrador    
+    # Verificación pendiente por administrador
   'Verification Status' => 'Estado de verificación',
   'auth_pending' => 'Tu cuenta aún está pendiente de verificación',
   'auth_unverified' => 'Tu cuenta actualmente no está verificada y requiere una verificación manual por parte de un administrador.',
@@ -124,7 +126,7 @@ return array (
     | resources/views/layouts/sidebar.blade.php
     |
     */
-    
+
     'Settings' => 'Configuraciones',
     'Scheme' => 'Esquema',
     'Auto' => 'Auto',
@@ -144,8 +146,8 @@ return array (
     'Rounded All' => 'Todo redondeado',
     'Pill One Side' => 'Píldora de un lado',
     'Pill All' => 'Píldora de ambos lados',
-  
-  
+
+
       /*
       |--------------------------------------------------------------------------
       | Personalización del sitio
@@ -154,7 +156,7 @@ return array (
       | resources/views/panel/site.blade.php
       |
       */
-      
+
     'Home' => 'Inicio',
     'Add Link' => 'Agregar enlace',
     'Administration' => 'Administración',
@@ -170,8 +172,8 @@ return array (
     'Site logo' => 'Logo del sitio',
     'Favicon' => 'Favicon',
     'Home message' => 'Mensaje de inicio',
-  
-  
+
+
       /*
       |--------------------------------------------------------------------------
       | Barra de navegación
@@ -180,7 +182,7 @@ return array (
       | resources/views/layouts/sidebar.blade.php
       |
       */
-      
+
     'View Page' => 'Ver página',
     'Share your profile' => 'Comparte tu perfil',
     'Share your profile:' => 'Comparte tu perfil:',
@@ -191,14 +193,14 @@ return array (
     'Scan QR Code' => 'Escanear código QR',
     'QR code could not be generated' => 'No se pudo generar el código QR',
     'Reason:' => 'Razón:',
-  
+
       # Desplegable de código QR
     'Close' => 'Cerrar',
     'Dismiss' => 'Descartar',
-  
+
       # Desplegable de notificación
     'All Notifications' => 'Todas las notificaciones',
-  
+
       # Desplegable de actualización
     'Updater' => 'Actualizador',
     'Beta Mode' => 'Modo beta',
@@ -208,7 +210,7 @@ return array (
     'Update available' => 'Actualización disponible',
     'Up to date' => 'Actualizado',
     'Check again' => 'Verificar de nuevo',
-  
+
       # Sección de usuario en la barra de navegación
     'Administrator' => 'Administrador',
     'Verified user' => 'Usuario verificado',
@@ -216,8 +218,8 @@ return array (
     'Profile' => 'Perfil',
     'Styling' => 'Estilo',
     'Logout' => 'Cerrar sesión',
-  
-  
+
+
       /*
       |--------------------------------------------------------------------------
       | Página del tablero de control
@@ -226,13 +228,13 @@ return array (
       | resources/views/panel/index.blade.php
       |
       */
-  
+
       # Encabezado con imagen
     'Hi' => 'Hola',
     'stranger' => 'extraño',
     'welcome' => '¡Bienvenido a :appName!',
     'Set a handle' => 'Establecer un identificador',
-  
+
       # Página del tablero de control
     'Total Links:' => 'Total de enlaces:',
     'Link Clicks:' => 'Clics en el enlace:',
@@ -250,9 +252,9 @@ return array (
     'Last 7 days' => 'Últimos 7 días',
     'Last 24 hours' => 'Últimas 24 horas',
     'Active users:' => 'Usuarios activos:',
-  
-  
-      
+
+
+
       /*
       |--------------------------------------------------------------------------
       | Editor de botones
@@ -261,7 +263,7 @@ return array (
       | resources/views/studio/button-editor.blade.php
       |
       */
-      
+
     'Button Editor' => 'Editor de botones',
     'Back' => 'Atrás',
     'Custom Button' => 'Botón personalizado',
@@ -290,8 +292,8 @@ return array (
     'Color HEX1' => 'Color HEX1',
     'Update icon' => 'Actualizar icono',
     'See all icons' => 'Ver todos los iconos',
-  
-  
+
+
       /*
       |--------------------------------------------------------------------------
       | Página de edición de enlace
@@ -300,7 +302,7 @@ return array (
       | resources/views/studio/edit-link.blade.php
       |
       */
-      
+
     'Edit' => 'Editar',
     'Add' => 'Agregar',
     'Block' => 'Bloque',
@@ -311,8 +313,8 @@ return array (
     'Save and Add More' => 'Guardar y agregar más',
     'Click to change link blocks' => 'Haz clic para cambiar los bloques de enlace',
     'Click for a list of available link blocks' => 'Haz clic para obtener una lista de bloques de enlace disponibles',
-  
-  
+
+
       /*
       |--------------------------------------------------------------------------
       | Página de enlaces
@@ -321,7 +323,7 @@ return array (
       | resources/views/studio/links.blade.php
       |
       */
-      
+
     'My Links' => 'Mis enlaces',
     'Add new Link' => 'Agregar nuevo enlace',
     'No Link Added' => 'No has agregado ningún enlace aún.',
@@ -330,15 +332,15 @@ return array (
     'No compatible browser' => 'Tu navegador no es compatible',
     'Page Icons' => 'Iconos de la página',
     'Save links' => 'Guardar enlaces',
-  
+
       # Tooltips
     'Customize' => 'Personalizar',
     'Delete' => 'Eliminar',
     'Clear icon cache' => 'Borrar caché de iconos',
-  
+
     'confirm_delete' => '¿Realmente quieres eliminar :title?',
-  
-  
+
+
       /*
       |--------------------------------------------------------------------------
       | "Mi perfil"/Página de apariencia
@@ -347,7 +349,7 @@ return array (
       | resources/views/studio/page.blade.php
       |
       */
-      
+
     'My Profile' => 'Mi perfil',
     'Profile Picture' => 'Imagen de perfil',
     'Page URL' => 'URL de la página',
@@ -725,10 +727,10 @@ return array (
 */
 
 # Title Tag
-'LinkStack setup' => 'Configuración de LinkStack',
+'LinkStack setup' => 'Configuración de Mynha Link',
 
-'Setup LinkStack' => 'Instalación de LinkStack',
-'Welcome to the setup for LinkStack!' => '¡Bienvenido a la configuración de LinkStack!',
+'Setup LinkStack' => 'Instalación de Mynha Link',
+'Welcome to the setup for LinkStack!' => '¡Bienvenido a la configuración de Mynha Link!',
 'This setup will:' => 'Esta instalación hará:',
 'Check the server dependencies' => '1. Verificar las dependencias del servidor',
 'Setup the database' => '2. Configurar la base de datos',

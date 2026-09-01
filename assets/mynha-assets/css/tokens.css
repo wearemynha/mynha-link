@@ -1,0 +1,83 @@
+@font-face {
+    font-family: "Anek Latin";
+    font-style: normal;
+    font-weight: 100 800;
+    font-stretch: 75% 125%;
+    font-display: swap;
+    src: url("../../fonts/AnekLatin/AnekLatin-Variable.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Albert Sans";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../../fonts/AlbertSans/AlbertSans-Variable.ttf") format("truetype");
+}
+
+:root {
+    /* Brand palette */
+    --mynha-primary: #dddfcf;
+    --mynha-secondary: #8dc048;
+    --mynha-tertiary: #848948;
+    --mynha-black: #000000;
+    --mynha-surface: #d6d8c4;
+
+    /* Semantic colors: components should consume these names. */
+    --mynha-color-page: var(--mynha-primary);
+    --mynha-color-surface: var(--mynha-surface);
+    --mynha-color-surface-strong: #cdd0b7;
+    --mynha-color-action: var(--mynha-secondary);
+    --mynha-color-action-hover: var(--mynha-tertiary);
+    --mynha-color-text: var(--mynha-black);
+    --mynha-color-text-on-action-hover: var(--mynha-primary);
+    --mynha-color-border: var(--mynha-tertiary);
+    --mynha-color-focus: var(--mynha-black);
+    --mynha-color-danger: #8b1e1e;
+    --mynha-color-danger-surface: #f1d3cf;
+    --mynha-color-warning: #735c00;
+    --mynha-color-warning-surface: #f3e7b3;
+    --mynha-color-success: #365f1d;
+    --mynha-color-success-surface: #d7e7c4;
+    --mynha-color-info: #31596b;
+    --mynha-color-info-surface: #d3e4e8;
+
+    /* Typography */
+    --mynha-font-primary: "Anek Latin", sans-serif;
+    --mynha-font-secondary: "Albert Sans", sans-serif;
+    --mynha-font-size-sm: 0.875rem;
+    --mynha-font-size-md: 1rem;
+    --mynha-font-size-lg: 1.125rem;
+    --mynha-font-size-xl: 1.75rem;
+    --mynha-line-height: 1.6;
+
+    /* Spacing */
+    --mynha-space-1: 0.25rem;
+    --mynha-space-2: 0.5rem;
+    --mynha-space-3: 0.75rem;
+    --mynha-space-4: 1rem;
+    --mynha-space-5: 1.25rem;
+    --mynha-space-6: 1.5rem;
+    --mynha-space-8: 2rem;
+    --mynha-space-10: 2.5rem;
+    --mynha-space-12: 3rem;
+    --mynha-space-16: 4rem;
+
+    /* Shape, depth and motion */
+    --mynha-radius-sm: 0.375rem;
+    --mynha-radius-md: 0.5rem;
+    --mynha-radius-lg: 0.75rem;
+    --mynha-radius-xl: 1.5rem;
+    --mynha-shadow-sm: 0 4px 14px rgb(132 137 72 / 18%);
+    --mynha-shadow-md: 0 8px 24px rgb(132 137 72 / 28%);
+    --mynha-shadow-lg: 0 14px 38px rgb(132 137 72 / 30%);
+    --mynha-duration-fast: 150ms;
+    --mynha-duration-normal: 220ms;
+    --mynha-ease-standard: ease;
+
+    /* Reusable dimensions */
+    --mynha-control-height: 3rem;
+    --mynha-content-sm: 26.25rem;
+    --mynha-content-md: 37.5rem;
+    --mynha-content-lg: 82.5rem;
+}
