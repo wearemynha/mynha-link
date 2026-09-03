@@ -20,7 +20,7 @@ class CheckBlockedUser
     if (Auth::check() && Auth::user()->block === "yes") {
         return redirect()->route('blocked');
     }
-    if (env('MAINTENANCE_MODE') == 'true' && (Auth::check() && Auth::user()->role != 'admin')) {
+    if (config('linkstack.maintenance_mode') == 'true' && (Auth::check() && Auth::user()->role != 'admin')) {
         return redirect(url(''));
     }
 

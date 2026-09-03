@@ -9,7 +9,7 @@ $usrhandl = Auth::user()->littlelink_name;
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>{{env('APP_NAME')}}</title>
+      <title>{{config('app.name')}}</title>
 
       <script src="{{asset('assets/js/detect-dark-mode.js')}}"></script>
       
@@ -101,7 +101,7 @@ $usrhandl = Auth::user()->littlelink_name;
                 </div>
                 <!--logo End-->
                 
-                <h4 class="logo-title">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title">{{config('app.name')}}</h4>
             </a>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
@@ -260,7 +260,7 @@ $usrhandl = Auth::user()->littlelink_name;
                 <!--logo End-->
                 
                 
-                <h4 class="logo-title">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title">{{config('app.name')}}</h4>
             </a>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
@@ -297,8 +297,8 @@ $usrhandl = Auth::user()->littlelink_name;
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSM">
                       <li><h6 class="dropdown-header">{{__('messages.Share your profile:')}}</h6></li>
-                      @if(env('SUPPORTED_DOMAINS') !== '' and env('SUPPORTED_DOMAINS') !== null)
-                      @php $sDomains = str_replace(' ', '', env('SUPPORTED_DOMAINS')); $sDomains = explode(',', $sDomains); @endphp
+                      @if(config('linkstack.supported_domains') !== '' and config('linkstack.supported_domains') !== null)
+                      @php $sDomains = str_replace(' ', '', config('linkstack.supported_domains')); $sDomains = explode(',', $sDomains); @endphp
                         @foreach ($sDomains as $myvar)
                             <li>
                                 <a class="dropdown-item share-button" style="cursor:pointer!important;" data-share="{{'https://'.$myvar.'/@'.Auth::user()->littlelink_name}}">
@@ -423,16 +423,16 @@ $usrhandl = Auth::user()->littlelink_name;
       <footer class="footer">
           <div class="footer-body">
               <ul class="left-panel list-inline mb-0 p-0">
-                @if(env('DISPLAY_FOOTER') === true)
-                  @if(env('DISPLAY_FOOTER_HOME') === true)<li class="list-inline-item"><a class="list-inline-item" href="@if(str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) === "" ){{ url('') }}@else{{ str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) }}@endif">{{footer('Home')}}</a></li>@endif
-                  @if(env('DISPLAY_FOOTER_TERMS') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
-                  @if(env('DISPLAY_FOOTER_PRIVACY') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
-                  @if(env('DISPLAY_FOOTER_CONTACT') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
+                @if(config('linkstack.display_footer') === true)
+                  @if(config('linkstack.display_footer_home') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ config('linkstack.home_footer_link') ?: url('') }}">{{footer('Home')}}</a></li>@endif
+                  @if(config('linkstack.display_footer_terms') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
+                  @if(config('linkstack.display_footer_privacy') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
+                  @if(config('linkstack.display_footer_contact') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
                 @endif
               </ul>
               <div class="right-panel">
                 {{__('messages.Copyright')}} &copy; @php echo date('Y'); @endphp {{ config('app.name') }}
-                @if(env('DISPLAY_CREDIT_FOOTER') === true)
+                @if(config('linkstack.display_credit_footer') === true)
                   <span class="">
                     - {{__('messages.Made with')}} 
                       <svg class="icon-15" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

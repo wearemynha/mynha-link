@@ -3,19 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
-
-use GeoSot\EnvEditor\Controllers\EnvController;
-use GeoSot\EnvEditor\Exceptions\EnvException;
-use GeoSot\EnvEditor\Helpers\EnvFileContentManager;
-use GeoSot\EnvEditor\Helpers\EnvFilesManager;
-use GeoSot\EnvEditor\Helpers\EnvKeysManager;
-use GeoSot\EnvEditor\Facades\EnvEditor;
-use GeoSot\EnvEditor\ServiceProvider;
 
 use Auth;
 use Exception;
@@ -28,6 +21,7 @@ use App\Models\Link;
 use App\Models\Page;
 use App\Models\UserData;
 use App\Services\AdvancedConfigManager;
+use App\Services\RuntimeConfigurationManager;
 
 class AdminController extends Controller
 {
@@ -554,7 +548,7 @@ class AdminController extends Controller
   }
 
   //Saves advanced config
-  public function editAC(request $request)
+  public function editAC(request $request, RuntimeConfigurationManager $runtimeConfigurationManager)
   {
     if ($request->ResetAdvancedConfig == "RESET_DEFAULTS") {
       copy(
@@ -565,17 +559,9 @@ class AdminController extends Controller
       file_put_contents("config/advanced-config.php", $request->AdvancedConfig);
     }
 
+    $runtimeConfigurationManager->rebuildCache();
+
     return redirect("/admin/config#2");
-  }
-
-  //Saves .env config
-  public function editENV(request $request)
-  {
-    $config = $request->altConfig;
-
-    file_put_contents(".env", $config);
-
-    return Redirect("/admin/config?alternative-config");
   }
 
   //Shows config file editor page
@@ -595,56 +581,30 @@ class AdminController extends Controller
   }
 
   //Shows config file editor page
-  public function editConfig(request $request)
+  public function editConfig(request $request, RuntimeConfigurationManager $runtimeConfigurationManager)
   {
-    $type = $request->type;
-    $entry = $request->entry;
-    $value = $request->value;
+    $validated = $request->validate([
+      "type" => ["required", "string"],
+      "entry" => ["required", "string"],
+      "value" => ["nullable", "string", "max:255"],
+    ]);
+
+    $type = $validated["type"];
+    $entry = $validated["entry"];
+    $value = $validated["value"] ?? "";
+    $changedEnvironment = true;
 
     if ($type === "toggle") {
-      if ($request->toggle != "") {
-        $value = "true";
-      } else {
-        $value = "false";
-      }
-      if (EnvEditor::keyExists($entry)) {
-        EnvEditor::editKey($entry, $value);
-      }
-    } elseif ($type === "toggle2") {
-      if ($request->toggle != "") {
-        $value = "verified";
-      } else {
-        $value = "auth";
-      }
-      if (EnvEditor::keyExists($entry)) {
-        EnvEditor::editKey($entry, $value);
-      }
+      $runtimeConfigurationManager->setBoolean($entry, $request->filled("toggle"));
+    } elseif ($type === "toggle2" && $entry === "REGISTER_AUTH") {
+      $runtimeConfigurationManager->setRegistrationMiddleware(
+        $request->filled("toggle") ? "verified" : "auth",
+      );
     } elseif ($type === "text") {
-      if (EnvEditor::keyExists($entry)) {
-        EnvEditor::editKey($entry, '"' . $value . '"');
+      if ($entry === "ADMIN_EMAIL") {
+        $request->validate(["value" => ["required", "email", "max:255"]]);
       }
-    } elseif ($type === "debug") {
-      if ($request->toggle != "") {
-        if (EnvEditor::keyExists("APP_DEBUG")) {
-          EnvEditor::editKey("APP_DEBUG", "true");
-        }
-        if (EnvEditor::keyExists("APP_ENV")) {
-          EnvEditor::editKey("APP_ENV", "local");
-        }
-        if (EnvEditor::keyExists("LOG_LEVEL")) {
-          EnvEditor::editKey("LOG_LEVEL", "debug");
-        }
-      } else {
-        if (EnvEditor::keyExists("APP_DEBUG")) {
-          EnvEditor::editKey("APP_DEBUG", "false");
-        }
-        if (EnvEditor::keyExists("APP_ENV")) {
-          EnvEditor::editKey("APP_ENV", "production");
-        }
-        if (EnvEditor::keyExists("LOG_LEVEL")) {
-          EnvEditor::editKey("LOG_LEVEL", "error");
-        }
-      }
+      $runtimeConfigurationManager->setText($entry, $value);
     } elseif ($type === "register") {
       if ($request->toggle != "") {
         $register = "true";
@@ -652,74 +612,38 @@ class AdminController extends Controller
         $register = "false";
       }
       Page::first()->update(["register" => $register]);
-    } elseif ($type === "smtp") {
-      if ($request->toggle != "") {
-        $value = "built-in";
-      } else {
-        $value = "smtp";
-      }
-      if (EnvEditor::keyExists("MAIL_MAILER")) {
-        EnvEditor::editKey("MAIL_MAILER", $value);
-      }
-
-      if (EnvEditor::keyExists("MAIL_HOST")) {
-        EnvEditor::editKey("MAIL_HOST", $request->MAIL_HOST);
-      }
-      if (EnvEditor::keyExists("MAIL_PORT")) {
-        EnvEditor::editKey("MAIL_PORT", $request->MAIL_PORT);
-      }
-      if (EnvEditor::keyExists("MAIL_USERNAME")) {
-        EnvEditor::editKey(
-          "MAIL_USERNAME",
-          '"' . $request->MAIL_USERNAME . '"',
-        );
-      }
-      if (EnvEditor::keyExists("MAIL_PASSWORD")) {
-        EnvEditor::editKey(
-          "MAIL_PASSWORD",
-          '"' . $request->MAIL_PASSWORD . '"',
-        );
-      }
-      if (EnvEditor::keyExists("MAIL_ENCRYPTION")) {
-        EnvEditor::editKey("MAIL_ENCRYPTION", $request->MAIL_ENCRYPTION);
-      }
-      if (EnvEditor::keyExists("MAIL_FROM_ADDRESS")) {
-        EnvEditor::editKey("MAIL_FROM_ADDRESS", $request->MAIL_FROM_ADDRESS);
-      }
+      $changedEnvironment = false;
     } elseif ($type === "homeurl") {
-      if ($request->value == "default") {
-        $value = "";
+      if ($entry === "LOCALE") {
+        $runtimeConfigurationManager->setLocale($value);
+      } elseif ($entry === "HOME_URL") {
+        $runtimeConfigurationManager->setHomeUrl($value);
       } else {
-        $value = '"' . $request->value . '"';
-      }
-      if (EnvEditor::keyExists($entry)) {
-        EnvEditor::editKey($entry, $value);
+        abort(422, "This setting is controlled by the deployment.");
       }
     } elseif ($type === "maintenance") {
-      if ($request->toggle != "") {
-        $value = "true";
-      } else {
-        $value = "false";
+      if (!config("linkstack.maintenance_mode_available")) {
+        abort(422, "Maintenance mode is currently unavailable.");
       }
-      if (file_exists(base_path("storage/MAINTENANCE"))) {
-        unlink(base_path("storage/MAINTENANCE"));
-      }
-      if (EnvEditor::keyExists($entry)) {
-        EnvEditor::editKey($entry, $value);
-      }
+
+      $runtimeConfigurationManager->setMaintenanceMode($request->filled("toggle"));
     } else {
-      if (EnvEditor::keyExists($entry)) {
-        EnvEditor::editKey($entry, $value);
-      }
+      abort(422, "This setting is controlled by the deployment.");
+    }
+
+    if ($changedEnvironment) {
+      $runtimeConfigurationManager->rebuildCache();
     }
 
     return Redirect("/admin/config");
   }
 
-  //Shows theme editor page
-  public function showThemes(request $request)
+  public function disableMaintenance(RuntimeConfigurationManager $runtimeConfigurationManager): RedirectResponse
   {
-    return view("/panel/theme");
+    $runtimeConfigurationManager->setMaintenanceMode(false);
+    $runtimeConfigurationManager->rebuildCache();
+
+    return redirect("/dashboard");
   }
 
   //Removes impersonation if authenticated

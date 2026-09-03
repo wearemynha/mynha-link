@@ -1,6 +1,5 @@
 <?php
 
-use GeoSot\EnvEditor\Facades\EnvEditor;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -28,14 +27,19 @@ use App\Services\AdvancedConfigManager;
 // Prevents section below from being run by 'composer update'
 if(file_exists(base_path('storage/app/ISINSTALLED'))){
   // generates new APP KEY if no one is set
-  if(EnvEditor::getKey('APP_KEY')==''){try{Artisan::call('key:generate');} catch (exception $e) {}}
+  if (empty(config('app.key'))) {
+    try {
+      Artisan::call('key:generate');
+    } catch (exception $e) {
+    }
+  }
  
   // copies template meta config if none is present
   app(AdvancedConfigManager::class)->ensureExists();
  }
 
  // Installer
-$installerActive = !app()->environment('testing') && (file_exists(base_path('INSTALLING')) || file_exists(base_path('INSTALLERLOCK')));
+$installerActive = !app()->environment('testing') && (file_exists(storage_path('app/INSTALLING')) || file_exists(storage_path('app/INSTALLERLOCK')));
 
 if ($installerActive) {
 
@@ -47,7 +51,7 @@ if ($installerActive) {
 
   Route::get('{any}', function() {
     if (Schema::hasTable('users') && DB::table('users')->exists()) {
-    if(file_exists(base_path("INSTALLING")) and !file_exists(base_path('INSTALLERLOCK'))){unlink(base_path("INSTALLING"));header("Refresh:0");}
+    if(file_exists(storage_path("app/INSTALLING")) and !file_exists(storage_path('app/INSTALLERLOCK'))){unlink(storage_path("app/INSTALLING"));header("Refresh:0");}
     } else {
       return redirect(url(''));
     }
@@ -56,7 +60,7 @@ if ($installerActive) {
 }else{
 
 // Disables routes if in Maintenance Mode
-if(env('MAINTENANCE_MODE') != 'true'){
+if(!config('linkstack.maintenance_mode')){
 
 require __DIR__.'/home.php';
 
@@ -96,9 +100,9 @@ Route::get('/block-asset/{type}', [LinkTypeViewController::class, 'blockAsset'])
 Route::middleware(['auth', 'blocked', 'impersonate'])->group(function () {
 //User route
 Route::group([
-    'middleware' => env('REGISTER_AUTH'),
+    'middleware' => config('linkstack.register_auth') === 'verified' ? 'verified' : 'auth',
 ], function () {
-if(env('FORCE_ROUTE_HTTPS') == 'true'){URL::forceScheme('https');}
+if(config('linkstack.force_route_https')){URL::forceScheme('https');}
 if(isset($_COOKIE['LinkCount'])){if($_COOKIE['LinkCount'] == '20'){$LinkPage = 'showLinks20';}elseif($_COOKIE['LinkCount'] == '30'){$LinkPage = 'showLinks30';}elseif($_COOKIE['LinkCount'] == 'all'){$LinkPage = 'showLinksAll';} else {$LinkPage = 'showLinks';}} else {$LinkPage = 'showLinks';} //Shows correct link number
 Route::get('/dashboard', [AdminController::class, 'index'])->name('panelIndex');
 Route::get('/studio/index', function(){return redirect(url('dashboard'));});
@@ -132,11 +136,11 @@ Route::get('/admin/users/all', fn() => redirect(route('showUsers')));
 Route::get('/studio', fn() => redirect(url('dashboard')));
 Route::get('/studio/edit-link', fn() => redirect(url('dashboard')));
 
-if(env('ALLOW_USER_EXPORT') != false){
+if(config('linkstack.allow_user_export')){
   Route::get('/export-links', [UserController::class, 'exportLinks'])->name('exportLinks');
   Route::get('/export-all', [UserController::class, 'exportAll'])->name('exportAll');
 }
-if(env('ALLOW_USER_IMPORT') != false){
+if(config('linkstack.allow_user_import')){
   Route::post('/import-data', [UserController::class, 'importData'])->name('importData');
 }
 Route::get('/studio/linkparamform_part/{typeid}/{linkid}', [LinkTypeViewController::class, 'getParamForm'])->name('linkparamform.part');
@@ -153,7 +157,7 @@ Route::middleware(['auth', 'blocked', 'impersonate'])->group(function () {
 Route::group([
     'middleware' => 'admin',
 ], function () {
-    if(env('FORCE_ROUTE_HTTPS') == 'true'){URL::forceScheme('https');}
+    if(config('linkstack.force_route_https')){URL::forceScheme('https');}
     Route::get('/panel/index', function(){return redirect(url('dashboard'));});
     Route::get('/admin/users', [AdminController::class, 'users'])->name('showUsers');
     Route::get('/admin/links/{id}', [AdminController::class, 'showLinksUser'])->name('showLinksUser');
@@ -178,6 +182,7 @@ Route::group([
     Route::get('/admin/backups', [AdminController::class, 'showBackups'])->name('showBackups');
     Route::get('/admin/config', [AdminController::class, 'showConfig'])->name('showConfig');
     Route::post('/admin/config', [AdminController::class, 'editConfig'])->name('editConfig');
+    Route::post('/admin/maintenance/disable', [AdminController::class, 'disableMaintenance'])->name('disableMaintenance');
     Route::get('/send-test-email', [AdminController::class, 'SendTestMail'])->name('SendTestMail');
     Route::get('/auth-as/{id}', [AdminController::class, 'authAsID'])->name('authAsID');
     Route::get('/backup', function () {return view('backup', []);});
@@ -193,7 +198,7 @@ Route::group([
 });
 
 // Displays Maintenance Mode page
-if(env('MAINTENANCE_MODE') == 'true'){
+if(config('linkstack.maintenance_mode')){
 Route::get('/{any}', function () {
   return view('maintenance');
   })->where('any', '.*');

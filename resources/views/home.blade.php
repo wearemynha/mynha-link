@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     @php $GLOBALS['themeName'] = config('advanced-config.home_theme'); @endphp
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      @if(env('CUSTOM_META_TAGS') == 'true' and config('advanced-config.title') != '')
+      @if(config('linkstack.custom_meta_tags') == 'true' and config('advanced-config.title') != '')
       <title>{{ config('advanced-config.title') }}</title>
       @else
       <title>{{ config('app.name') }}</title>
@@ -19,7 +19,7 @@
     <!-- Facebook Meta Tags -->
     <meta property="og:url" content="{{ url('') }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{env('APP_NAME')}}">
+    <meta property="og:title" content="{{config('app.name')}}">
     <meta property="og:description" content='@if($message->home_message == "default"){!!strip_tags(__('messages.HOME.MESSAGE'))!!}@else{!!$message->home_message!!}@endif'>
     @if(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
     <meta property="og:image" content="{{ asset('assets/linkstack/images/'.findFile('avatar')) }}">
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="{{ url('') }}">
     <meta property="twitter:url" content="{{ url('') }}">
-    <meta name="twitter:title" content="{{env('APP_NAME')}}">
+    <meta name="twitter:title" content="{{config('app.name')}}">
     <meta name="twitter:description" content='@if($message->home_message == "default"){!!strip_tags(__('messages.HOME.MESSAGE'))!!}@else{!!$message->home_message!!}@endif'>
     @if(file_exists(base_path("assets/linkstack/images/").findFile('avatar')))
     <meta name="twitter:image" content="{{ asset('assets/linkstack/images/'.findFile('avatar')) }}">
@@ -112,7 +112,7 @@
                 <!--logo End-->
                 
                 
-                <h4 class="logo-title">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title">{{config('app.name')}}</h4>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon">
@@ -139,7 +139,7 @@
                 </li>
                 @endif
             
-                @if ((env('ALLOW_REGISTRATION')) and !config('linkstack.single_user_mode'))
+                @if ((config('linkstack.allow_registration')) and !config('linkstack.single_user_mode'))
                 <li class="me-0 me-xl-2">
                   <a class="btn btn-secondary btn-sm d-flex gap-2 align-items-center" aria-current="page" href="{{ route('register') }}">
                     {{__('messages.Register')}}
@@ -195,7 +195,7 @@
                   <a class="btn btn-primary me-3" href="{{ route('login') }}">{{__('messages.Log in')}}</a>
                   @endif
               
-                  @if ((env('ALLOW_REGISTRATION')) and !config('linkstack.single_user_mode'))
+                  @if ((config('linkstack.allow_registration')) and !config('linkstack.single_user_mode'))
                   <a class="btn btn-secondary me-3" href="{{ route('register') }}">{{__('messages.Register')}}</a>
                   @endif
               @endauth
@@ -220,16 +220,16 @@
           <footer class="footer fixed-bottom">
             <div class="footer-body">
                 <ul class="left-panel list-inline mb-0 p-0">
-                  @if(env('DISPLAY_FOOTER') === true)
-                    @if(env('DISPLAY_FOOTER_HOME') === true)<li class="list-inline-item"><a class="list-inline-item" href="@if(str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) === "" ){{ url('') }}@else{{ str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) }}@endif">{{footer('Home')}}</a></li>@endif
-                    @if(env('DISPLAY_FOOTER_TERMS') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
-                    @if(env('DISPLAY_FOOTER_PRIVACY') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
-                    @if(env('DISPLAY_FOOTER_CONTACT') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
+                  @if(config('linkstack.display_footer') === true)
+                    @if(config('linkstack.display_footer_home') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ config('linkstack.home_footer_link') ?: url('') }}">{{footer('Home')}}</a></li>@endif
+                    @if(config('linkstack.display_footer_terms') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
+                    @if(config('linkstack.display_footer_privacy') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
+                    @if(config('linkstack.display_footer_contact') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
                   @endif
                 </ul>
                 <div class="right-panel">
                   {{__('messages.Copyright')}} &copy; @php echo date('Y'); @endphp {{ config('app.name') }}
-                  @if(env('DISPLAY_CREDIT_FOOTER') === true)
+                  @if(config('linkstack.display_credit_footer') === true)
                     <span class="">
                       - {{__('messages.Made with')}} 
                         <svg class="icon-15" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

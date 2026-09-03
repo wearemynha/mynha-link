@@ -12,7 +12,7 @@
   @endif
 @endforeach
 
-@if(env('CUSTOM_META_TAGS') == 'true')
+@if(config('linkstack.custom_meta_tags') == 'true')
   @include('layouts.meta')
 @else
   <meta name="description" content="{{ strip_tags($userinfo->littlelink_description) }}">
@@ -52,11 +52,11 @@
 
 <!--#### END Meta Tags social media preview images  ####-->
 
-@if(config('advanced-config.linkstack_title') != '' and env('HOME_URL') === '')
+@if(config('advanced-config.linkstack_title') != '' and config('linkstack.home_url') === '')
 <title>{{ $userinfo->name }} {{ config('advanced-config.linkstack_title') }}</title>
-@elseif(env('CUSTOM_META_TAGS') == 'true' and config('advanced-config.title') != '')
+@elseif(config('linkstack.custom_meta_tags') == 'true' and config('advanced-config.title') != '')
 <title>{{ config('advanced-config.title') }}</title>
-@elseif(env('HOME_URL') != '')
+@elseif(config('linkstack.home_url') != '')
 <title>{{ $userinfo->name }}</title>
 @else
 <title>{{ $userinfo->name }} 🔗 {{ config('app.name') }} </title>

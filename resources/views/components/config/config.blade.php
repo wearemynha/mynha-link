@@ -165,7 +165,7 @@ function toggle($key){
 	<h5 style="margin-top:50px">'; echo __('messages.'.$key.'.title'); echo '</h5>
     <p class="text-muted">'; echo __('messages.'.$key.'.description'); echo '</p>
 	<div class="input-group">
-	<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="'.$key.'"'; if(EnvEditor::getKey($key) == 'false'){echo '/>';}else{echo 'checked>';} echo '<label for="'.$key.'" class="form-check-label">'.__('messages.Enable').'</label></div>
+	<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="'.$key.'"'; if(!config('linkstack.'.strtolower($key))){echo '/>';}else{echo 'checked>';} echo '<label for="'.$key.'" class="form-check-label">'.__('messages.Enable').'</label></div>
 	</div></div>
     <input type="hidden" name="_token" value="'.csrf_token().'">
     <script type="text/javascript">
@@ -189,7 +189,7 @@ function toggle2($key){
 	<h5 style="margin-top:50px">'; echo __('messages.'.$key.'.title'); echo '</h5>
     <p class="text-muted">'; echo __('messages.'.$key.'.description'); echo '</p>
 	<div class="input-group">
-	<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="'.$key.'"'; if(EnvEditor::getKey($key) == 'auth'){echo '/>';}else{echo 'checked>';} echo '<label for="'.$key.'" class="form-check-label">'.__('messages.Enable').'</label></div>
+	<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="'.$key.'"'; if(config('linkstack.register_auth') === 'auth'){echo '/>';}else{echo 'checked>';} echo '<label for="'.$key.'" class="form-check-label">'.__('messages.Enable').'</label></div>
 	</div></div>
     <input type="hidden" name="_token" value="'.csrf_token().'">
     <script type="text/javascript">
@@ -205,7 +205,15 @@ document.getElementById("'.$key.'-form").addEventListener("change", function() {
 
 <?php 
 function text($key){
-    $configValue = str_replace('"', "", EnvEditor::getKey($key));
+    $configPath = match ($key) {
+        'ADMIN_EMAIL' => 'linkstack.admin_email',
+        'APP_NAME' => 'app.name',
+        'TITLE_FOOTER_CONTACT' => 'linkstack.footer_titles.contact',
+        'TITLE_FOOTER_HOME' => 'linkstack.footer_titles.home',
+        'TITLE_FOOTER_PRIVACY' => 'linkstack.footer_titles.privacy',
+        'TITLE_FOOTER_TERMS' => 'linkstack.footer_titles.terms',
+    };
+    $configValue = config($configPath, '');
 	echo '
     <form id="'.$key.'-form" action="'.route('editConfig').'" enctype="multipart/form-data" method="post">
     <div class="form-group col-lg-8">
@@ -239,7 +247,7 @@ function text($key){
 {{text('ADMIN_EMAIL')}}
 
 {{-- start home url --}}
-<?php $configValue2 = str_replace('"', "", EnvEditor::getKey('HOME_URL')); ?>
+<?php $configValue2 = config('linkstack.home_url'); ?>
 <form id="home-url-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
 <div class="form-group col-lg-8">
 <input value="homeurl" name="type" style="display:none;" type="text" class="form-control form-control-lg" required>
@@ -262,9 +270,6 @@ foreach($users as $user){if($user->littlelink_name != $configValue2){echo '<opti
 {{-- end home url --}}
 
 
-{{toggle('FORCE_HTTPS')}}
-
-
 {{text('APP_NAME')}}
 
 
@@ -277,9 +282,6 @@ foreach($users as $user){if($user->littlelink_name != $configValue2){echo '<opti
 <a name="Panel-settings"><h2 class="ch2">{{__('messages.Panel settings')}}</h2></a>
 
 {{toggle('NOTIFY_EVENTS')}}
-
-
-{{toggle('NOTIFY_UPDATES')}}
 
 
 {{toggle('ENABLE_BUTTON_EDITOR')}}
@@ -300,12 +302,6 @@ foreach($users as $user){if($user->littlelink_name != $configValue2){echo '<opti
 {{toggle('ALLOW_USER_HTML')}}
 
 
-{{toggle('ALLOW_CUSTOM_CODE_IN_THEMES')}}
-
-
-{{toggle('ENABLE_THEME_UPDATER')}}
-
-
 {{toggle('ALLOW_USER_EXPORT')}}
 
 
@@ -315,8 +311,6 @@ foreach($users as $user){if($user->littlelink_name != $configValue2){echo '<opti
 
 <a name="Advanced"><h2 class="ch2">{{__('messages.Advanced')}}</h2></a>
 
-{{toggle('JOIN_BETA')}}
-
 {{-- start MAINTENANCE_MODE --}}
 <form id="MAINTENANCE_MODE-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
 <div class="form-group col-lg-8">
@@ -325,7 +319,7 @@ foreach($users as $user){if($user->littlelink_name != $configValue2){echo '<opti
 <h5 style="margin-top:50px">{{__('messages.MAINTENANCE_MODE.title')}}</h5>
 <p class="text-muted">{{__('messages.MAINTENANCE_MODE.description')}}</p>
 <div class="input-group">
-<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="MAINTENANCE_MODE" <?php if(EnvEditor::getKey('MAINTENANCE_MODE') == 'true' or file_exists(base_path("storage/MAINTENANCE"))){echo 'checked>';}else{echo '/>';} ?><label for="MAINTENANCE_MODE" class="form-check-label">{{__('messages.Enable')}}</label></div>
+<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="MAINTENANCE_MODE" <?php if(config('linkstack.maintenance_mode') or file_exists(base_path("storage/MAINTENANCE"))){echo 'checked>';}else{echo '/>';} ?><label for="MAINTENANCE_MODE" class="form-check-label">{{__('messages.Enable')}}</label></div>
 </div></div>
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <script type="text/javascript">
@@ -337,64 +331,12 @@ document.getElementById("MAINTENANCE_MODE-form").addEventListener("change", func
 {{-- end MAINTENANCE_MODE --}}
 
 
-{{toggle('SKIP_UPDATE_BACKUP')}}
-
-
 {{toggle('CUSTOM_META_TAGS')}}
 
 
 @if(!config('linkstack.single_user_mode'))
 {{toggle('ENABLE_SOCIAL_LOGIN')}}
 @endif
-
-
-{{toggle('FORCE_ROUTE_HTTPS')}}
-
-
-{{-- start SMTP settings --}}
-<a name="SMTP"><h2 class="ch2">{{__('messages.SMTP')}}</h2></a>
-<form id="smtp-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
-<div class="form-group col-lg-8">
-<input value="smtp" name="type" style="display:none;" type="text" class="form-control form-control-lg" required>
-<input value="smtp" name="entry" style="display:none;" type="text" class="form-control form-control-lg" required>
-<h5 style="margin-top:50px">{{__('messages.SMTP.title')}}</h5>
-<p class="text-muted">{{__('messages.SMTP.description')}}<br>{{__('messages.SMTP.description.alt')}}</p>
-<div class="input-group">
-<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="toggle-smtp" <?php if(env('MAIL_MAILER') != 'built-in'){echo '/>';}else{echo 'checked>';} ?> <label for="toggle-smtp" class="form-check-label">{{__('messages.Enable')}}</label></div>
-</div></div>
-<input type="hidden" name="_token" value="{{csrf_token()}}">
-<div style="max-width: 600px; padding-left: 20px;">
-<br><h5>{{__('messages.Custom SMTP server:')}}</h5>
-<label style="margin-top:15px">{{__('messages.Host')}}</label>
-<input type="text" class="form-control form-control-lg" class="form-control form-control-lg" name="MAIL_HOST" value="{{env('MAIL_HOST')}}" />
-<label style="margin-top:15px">{{__('messages.Port')}}</label>
-<input type="text" class="form-control form-control-lg" class="form-control form-control-lg" name="MAIL_PORT" value="{{env('MAIL_PORT')}}" />
-<label style="margin-top:15px">{{__('messages.Username')}}</label>
-<input type="text" class="form-control form-control-lg" class="form-control form-control-lg" name="MAIL_USERNAME" value="{{env('MAIL_USERNAME')}}" />
-<label style="margin-top:15px">{{__('messages.Password')}}</label>
-<input type="password" class="form-control" name="MAIL_PASSWORD" value="{{env('MAIL_PASSWORD')}}" />
-<label style="margin-top:15px">{{__('messages.Encryption type')}}</label>
-<input type="text" class="form-control form-control-lg" class="form-control form-control-lg" name="MAIL_ENCRYPTION" value="{{env('MAIL_ENCRYPTION')}}" />
-<label style="margin-top:15px">{{__('messages.From address')}}</label>
-<input type="text" class="form-control form-control-lg" class="form-control form-control-lg" name="MAIL_FROM_ADDRESS" value="{{env('MAIL_FROM_ADDRESS')}}" />
-<button type="submit" class="btn btn-primary mt-4">{{__('messages.Apply changes')}}</button>
-</div>
-</form>
-
-<div class="form-group col-lg-8">
-  <br><br><h5>{{__('messages.Test E-Mail setup:')}}</h5>
-  @if (session('success'))
-  <div class="alert alert-success">
-      {{ session('success') }}
-  </div>
-@elseif (session('fail'))
-  <div class="alert alert-danger">
-      {{ session('fail') }}
-  </div>
-@endif
-</div>
-<a href="{{route('SendTestMail')}}"><button class="btn btn-gray">{{__('messages.Send Test E-Mail')}}</button></a>
-{{-- end SMTP settings --}}
 
 
 {{-- start footer settings --}}
@@ -410,7 +352,7 @@ document.getElementById("MAINTENANCE_MODE-form").addEventListener("change", func
 {{text('TITLE_FOOTER_HOME')}}
 
 @php
-    $configValue = str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK'));
+    $configValue = config('linkstack.home_footer_link');
 @endphp
     <form id="HOME_FOOTER_LINK-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
     <div class="form-group col-lg-8">
@@ -436,25 +378,9 @@ document.getElementById("MAINTENANCE_MODE-form").addEventListener("change", func
 {{-- end footer settings --}}
 
 
-{{-- start debug settings --}}
-<a name="Debug"><h2 class="ch2">{{__('messages.Debug')}}</h2></a>
-<form id="debug-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
-<div class="form-group col-lg-8">
-<input value="debug" name="type" style="display:none;" type="text" class="form-control form-control-lg" required>
-<input value="debug" name="entry" style="display:none;" type="text" class="form-control form-control-lg" required>
-<h5 style="margin-top:50px">{{__('messages.Debug.title')}}</h5>
-<p class="text-muted">{{__('messages.Debug.description')}}</p>
-<div class="input-group">
-<div class="mb-3 form-check form-switch toggle-btn"><input name="toggle" class="switch toggle-btn" type="checkbox" id="toggle-debug" <?php if(EnvEditor::getKey('APP_DEBUG') == 'false'){echo '/>';}else{echo 'checked>';} ?> <label for="toggle-debug" class="form-check-label">{{__('messages.Enable')}}</label></div>
-</div></div>
-<input type="hidden" name="_token" value="{{csrf_token()}}">
-<script type="text/javascript">document.getElementById("debug-form").addEventListener("change", function() { this.submit(); });</script>
-</form>
-{{-- end debug settings --}}
-
 {{-- start language --}}
 <a name="Language"><h2 class="ch2">{{__('messages.Language')}}</h2></a>
-<?php $configValue2 = str_replace('"', "", EnvEditor::getKey('LOCALE')); ?>
+<?php $configValue2 = config('app.locale'); ?>
 <form id="language-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
     <div class="form-group col-lg-8">
         <input value="homeurl" name="type" style="display:none;" type="text" class="form-control form-control-lg" required>

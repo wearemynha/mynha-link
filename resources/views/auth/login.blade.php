@@ -40,7 +40,7 @@ foreach($pages as $page)
                     @endif
                     </div>
                     <!--logo End-->
-                <h4 class="logo-title ms-3">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title ms-3">{{config('app.name')}}</h4>
               </a>
               <h2 class="mb-2 text-center">{{__('messages.Sign In')}}</h2>
               <p class="text-center">{{__('messages.Login to stay connected')}}.</p>
@@ -70,32 +70,32 @@ foreach($pages as $page)
                 <div class="d-flex justify-content-center">
                   <button type="submit" class="btn btn-primary">{{__('messages.Sign In')}}</button>
                 </div>
-                @if(env('ENABLE_SOCIAL_LOGIN') == 'true')
+                @if(config('linkstack.enable_social_login') == 'true')
                 <p class="text-center my-3">{{__('messages.or sign in with other accounts?')}}</p>
                 <div class="d-flex justify-content-center">
                   <ul class="list-group list-group-horizontal list-group-flush">
-                    @if(!empty(env('FACEBOOK_CLIENT_ID')))
+                    @if(!empty(config('services.facebook.client_id')))
                     <li class="list-group-item border-0 pb-0">
                       <a href="{{ route('social.redirect','facebook') }}">
                         <i class="bi bi-facebook"></i>
                       </a>
                     </li>
                     @endif
-                    @if(!empty(env('TWITTER_CLIENT_ID')))
+                    @if(!empty(config('services.twitter.client_id')))
                     <li class="list-group-item border-0 pb-0">
                       <a href="{{ route('social.redirect','twitter') }}">
                         <i class="bi bi-twitter"></i>
                       </a>
                     </li>
                     @endif
-                    @if(!empty(env('GOOGLE_CLIENT_ID')))
+                    @if(!empty(config('services.google.client_id')))
                     <li class="list-group-item border-0 pb-0">
                       <a href="{{ route('social.redirect','google') }}">
                         <i class="bi bi-google"></i>
                       </a>
                     </li>
                     @endif
-                    @if(!empty(env('GITHUB_CLIENT_ID')))
+                    @if(!empty(config('services.github.client_id')))
                     <li class="list-group-item border-0 pb-0">
                       <a href="{{ route('social.redirect','github') }}">
                         <i class="bi bi-github"></i>
@@ -107,7 +107,7 @@ foreach($pages as $page)
                 @else
                 <br>
                 @endif
-                @if ((env('ALLOW_REGISTRATION')) and !config('linkstack.single_user_mode'))
+                @if ((config('linkstack.allow_registration')) and !config('linkstack.single_user_mode'))
                 <p class="mt-3 text-center">
                   {{__('messages.Don’t have an account?')}} <a href="{{ route('register') }}" class="text-underline">{{__('messages.Click here to sign up')}}.</a>
                 </p>

@@ -27,7 +27,7 @@ $customHomeUrl = config('advanced-config.custom_home_url', '/home');
 $disableHomePageConfig = config('advanced-config.disable_home_page');
 $redirectHomePageConfig = config('advanced-config.redirect_home_page');
 
-if (env('HOME_URL') != '') {
+if (config('linkstack.home_url') != '') {
     Route::get('/', [UserController::class, 'littlelinkhome'])->name('littlelink.home');
     if ($disableHomePageConfig == 'redirect') {
         Route::get($customHomeUrl, function () use ($redirectHomePageConfig) {

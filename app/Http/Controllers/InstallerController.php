@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\AdvancedConfigManager;
+use App\Services\RuntimeConfigurationManager;
 use Exception;
-use GeoSot\EnvEditor\Facades\EnvEditor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +15,10 @@ use Illuminate\Validation\Rules\Password;
 
 class InstallerController extends Controller
 {
-    public function __construct(private readonly AdvancedConfigManager $advancedConfigManager)
-    {
+    public function __construct(
+        private readonly AdvancedConfigManager $advancedConfigManager,
+        private readonly RuntimeConfigurationManager $runtimeConfigurationManager,
+    ) {
     }
 
     public function showInstaller()
@@ -33,21 +35,13 @@ class InstallerController extends Controller
             'password' => ['required', 'string', 'confirmed', Password::min(12)->mixedCase()->numbers()->symbols()],
         ]);
 
-        $file = base_path('INSTALLERLOCK');
+        $file = storage_path('app/INSTALLERLOCK');
         if (!file_exists($file)) {
             $handleFile = fopen($file, 'w') or die('Cannot create file:  '.$file);
             fclose($handleFile);
         }
 
-        try {
-            if (EnvEditor::keyExists('ADMIN_EMAIL')) {
-                EnvEditor::editKey('ADMIN_EMAIL', $validated['email']);
-            } else {
-                EnvEditor::addKey('ADMIN_EMAIL', $validated['email']);
-            }
-        } catch (Exception $exception) {
-            report($exception);
-        }
+        $this->runtimeConfigurationManager->setText('ADMIN_EMAIL', $validated['email']);
 
         if (User::query()->doesntExist()) {
             $user = User::create([
@@ -107,19 +101,21 @@ class InstallerController extends Controller
 
         $this->advancedConfigManager->finalizeInstallation();
 
-        $this->setEnvironmentValue('ALLOW_REGISTRATION', $validated['register'] === 'Yes' ? 'true' : 'false');
-        $this->setEnvironmentValue('REGISTER_AUTH', $validated['verify'] === 'Yes' ? 'verified' : 'auth');
-        $this->setEnvironmentValue('HOME_URL', $validated['page'] === 'Yes' ? '"'.$llName.'"' : '');
-        $this->setEnvironmentValue('APP_NAME', '"'.$validated['app'].'"');
+        $this->runtimeConfigurationManager->setBoolean('ALLOW_REGISTRATION', $validated['register'] === 'Yes');
+        $this->runtimeConfigurationManager->setRegistrationMiddleware($validated['verify'] === 'Yes' ? 'verified' : 'auth');
+        $this->runtimeConfigurationManager->setHomeUrl($validated['page'] === 'Yes' ? $llName : '');
+        $this->runtimeConfigurationManager->setText('APP_NAME', $validated['app']);
 
-        if (file_exists(base_path('INSTALLING'))) {
-            unlink(base_path('INSTALLING'));
+        if (file_exists(storage_path('app/INSTALLING'))) {
+            unlink(storage_path('app/INSTALLING'));
         }
 
-        $file = base_path('INSTALLERLOCK');
+        $file = storage_path('app/INSTALLERLOCK');
         if (file_exists($file)) {
             unlink($file) or die('Cannot delete file: '.$file);
         }
+
+        $this->runtimeConfigurationManager->rebuildCache();
 
         return redirect(url('dashboard'));
     }
@@ -135,20 +131,10 @@ class InstallerController extends Controller
             'value' => ['required', 'string', Rule::in($availableLocales)],
         ]);
 
-        $value = '"'.$validated['value'].'"';
-
-        $this->setEnvironmentValue('LOCALE', $value);
+        $this->runtimeConfigurationManager->setLocale($validated['value']);
+        $this->runtimeConfigurationManager->rebuildCache();
 
         return redirect(url(''));
-    }
-
-    private function setEnvironmentValue(string $key, string $value): void
-    {
-        if (EnvEditor::keyExists($key)) {
-            EnvEditor::editKey($key, $value);
-        } else {
-            EnvEditor::addKey($key, $value);
-        }
     }
 
 }

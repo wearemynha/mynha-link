@@ -1,4 +1,4 @@
-@if($userinfo->role == 'user' and env('ENABLE_REPORT_ICON') == true)
+@if($userinfo->role == 'user' and config('linkstack.enable_report_icon') == true)
 <style>
     .report-pill-container {
       position: fixed;

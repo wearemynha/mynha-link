@@ -63,7 +63,7 @@ class UserTable extends DataTableComponent
             Column::make(__('messages.E-Mail'), "email_verified_at")
                 ->sortable()
                 ->format(function ($value, $row, Column $column) {
-                    if (env('REGISTER_AUTH') !== 'auth') {
+                    if (config('linkstack.register_auth') !== 'auth') {
                         if ($row->role == 'admin' && $row->email_verified_at != '') {
                             return '<div class="text-center">-</div>';
                         } else {

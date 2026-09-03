@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
 
         $name = $request->input('name');
 
-        if(env('MANUAL_USER_VERIFICATION') == true){
+        if(config('linkstack.manual_user_verification') == true){
             $block = 'yes';
         } else {
             $block = 'no';
@@ -66,11 +66,11 @@ class RegisteredUserController extends Controller
             $user = $request->name;
             $email = $request->email;
             
-            if(env('REGISTER_AUTH') == 'verified'){
-                if(env('MANUAL_USER_VERIFICATION') == true){
+            if(config('linkstack.register_auth') == 'verified'){
+                if(config('linkstack.manual_user_verification') == true){
                 try {
                 Mail::send('auth.user-confirmation', ['user' => $user, 'email' => $email], function ($message) use ($user) {
-                    $message->to(env('ADMIN_EMAIL'))
+                    $message->to(config('linkstack.admin_email'))
                             ->subject('New user registration');
                 });
             } catch (\Exception $e) {}

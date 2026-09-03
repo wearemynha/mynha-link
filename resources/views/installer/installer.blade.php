@@ -12,7 +12,7 @@ $queryString = request()->server('QUERY_STRING', '');
 
 @if(\Illuminate\Support\Facades\Schema::hasTable('users') && DB::table('users')->exists())
     @php
-    if(file_exists(base_path("INSTALLING"))){unlink(base_path("INSTALLING"));}
+    if(file_exists(storage_path("app/INSTALLING"))){unlink(storage_path("app/INSTALLING"));}
     header("Refresh:0");
     @endphp
 @else
@@ -31,7 +31,7 @@ $queryString = request()->server('QUERY_STRING', '');
         </div></p>  
         
 {{-- start language --}}
-<?php $configValue2 = str_replace('"', "", EnvEditor::getKey('LOCALE')); ?>
+<?php $configValue2 = config('app.locale'); ?>
 <form id="language-form" action="{{route('editConfigInstaller')}}" enctype="multipart/form-data" method="post">
     <div class="form-group col-lg-8">
         <input value="homeurl" name="type" style="display:none;" type="text" class="form-control form-control-lg" required>

@@ -30,7 +30,7 @@
               
                       @foreach($profile as $profile)
               
-              @if(env('REGISTER_AUTH') != 'verified' or auth()->user()->role == 'admin')
+              @if(config('linkstack.register_auth') != 'verified' or auth()->user()->role == 'admin')
                       <form  action="{{ route('editProfile') }}" method="post">
                       @csrf
                         <div class="form-group col-lg-8">
@@ -56,7 +56,7 @@
                     <input type="text" class="form-control" value="{{ strtoupper($profile->role) }}" readonly>
                   </div>
               
-              @if(env('ALLOW_USER_EXPORT') != false)
+              @if(config('linkstack.allow_user_export') != false)
               <div class="mt-3"><br><br><br>
                 <h4>{{__('messages.Export user data')}}</h4>
                 <p>{{__('messages.Export your user data')}}</p>
@@ -77,7 +77,7 @@
               </div>
               @endif
               
-              @if(env('ALLOW_USER_IMPORT') != false)
+              @if(config('linkstack.allow_user_import') != false)
               <form action="{{ route('importData') }}" enctype="multipart/form-data" method="post">
                 @csrf
                 <div class="form-group col-lg-8"><br><br><br>

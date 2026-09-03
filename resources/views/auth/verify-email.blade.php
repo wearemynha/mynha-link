@@ -25,7 +25,7 @@
                     @endif
                     </div>
                     <!--logo End-->
-                <h4 class="logo-title ms-3">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title ms-3">{{config('app.name')}}</h4>
               </a>
               <div class="mb-4 text-sm text-gray-600">
                 {{__('messages.auth_thanks')}}

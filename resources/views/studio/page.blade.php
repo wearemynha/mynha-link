@@ -248,7 +248,7 @@
                 
                     <div class="form-group col-lg-8">
                         <label>{{__('messages.Page Description')}}</label>
-                        <textarea class="form-control @if(env('ALLOW_USER_HTML') === true) ckeditor @endif" name="pageDescription" rows="3">{{ $page->littlelink_description ?? '' }}</textarea>
+                        <textarea class="form-control @if(config('linkstack.allow_user_html') === true) ckeditor @endif" name="pageDescription" rows="3">{{ $page->littlelink_description ?? '' }}</textarea>
                     </div>
                 
                     @if(auth()->user()->role == 'admin' || auth()->user()->role == 'vip')
@@ -282,7 +282,7 @@
                     <button id="submit-btn" type="submit" class="mt-3 ml-3 btn btn-primary">{{__('messages.Save')}}</button>
                 </form>
 
-                @if(env('ALLOW_USER_HTML') === true)
+                @if(config('linkstack.allow_user_html') === true)
                 <script src="{{ asset('assets/external-dependencies/ckeditor.js') }}"></script>
                 <script>
                   ClassicEditor

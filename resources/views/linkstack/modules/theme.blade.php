@@ -46,7 +46,7 @@ $customBackgroundExists = file_exists($customBackgroundPath)
 @endif
 
 @push('linkstack-head-end')
-@if(theme('enable_custom_code') == "true" and theme('enable_custom_head') == "true" and env('ALLOW_CUSTOM_CODE_IN_THEMES') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-head')@endif
+@if(theme('enable_custom_code') == "true" and theme('enable_custom_head') == "true" and config('linkstack.allow_custom_code_in_themes') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-head')@endif
 @if($info->theme != '' and $info->theme != 'default')
 
   <!-- LinkStack Theme: "{{$info->theme}}" -->
@@ -77,7 +77,7 @@ $customBackgroundExists = file_exists($customBackgroundPath)
 @endpush
 
 @push('linkstack-body-start')
-@if(theme('enable_custom_code') == "true" and theme('enable_custom_body') == "true" and env('ALLOW_CUSTOM_CODE_IN_THEMES') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body')@endif
+@if(theme('enable_custom_code') == "true" and theme('enable_custom_body') == "true" and config('linkstack.allow_custom_code_in_themes') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body')@endif
 
 @if($info->theme != '' and $info->theme != 'default')
     <!-- Enables parallax background animations -->
@@ -102,6 +102,6 @@ $customBackgroundExists = file_exists($customBackgroundPath)
 @endpush
 
 @push('linkstack-body-end')
-@if(theme('enable_custom_code') == "true" and theme('enable_custom_body_end') == "true" and env('ALLOW_CUSTOM_CODE_IN_THEMES') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body-end')@endif
+@if(theme('enable_custom_code') == "true" and theme('enable_custom_body_end') == "true" and config('linkstack.allow_custom_code_in_themes') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body-end')@endif
 @endpush
 @include('linkstack.modules.dynamic-contrast')
