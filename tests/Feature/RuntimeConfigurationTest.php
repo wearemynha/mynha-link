@@ -53,6 +53,31 @@ class RuntimeConfigurationTest extends TestCase
         $this->assertFalse(Route::has('deleteTheme'));
     }
 
+    public function test_maintenance_mode_is_unavailable_from_the_admin_panel(): void
+    {
+        $this->assertFalse(config('linkstack.maintenance_mode_available'));
+        $this->assertFalse(config('linkstack.maintenance_mode'));
+
+        $admin = $this->createUser(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->post(route('editConfig'), [
+                'type' => 'maintenance',
+                'entry' => 'MAINTENANCE_MODE',
+                'toggle' => 'on',
+            ])
+            ->assertStatus(422);
+
+        $configurationView = File::get(
+            resource_path('views/components/config/config.blade.php'),
+        );
+
+        $this->assertMatchesRegularExpression(
+            "/@if\(config\('linkstack\.maintenance_mode_available'\)\).*MAINTENANCE_MODE-form.*@endif/s",
+            $configurationView,
+        );
+    }
+
     public function test_only_supported_locales_are_available(): void
     {
         $this->assertSame(['en', 'es', 'pt-BR'], config('app.supported_locales'));

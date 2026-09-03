@@ -31,8 +31,9 @@ return [
     'hide_verification_checkmark' => (bool) env('HIDE_VERIFICATION_CHECKMARK', false),
     'home_url' => env('HOME_URL', ''),
     'home_footer_link' => env('HOME_FOOTER_LINK', ''),
-    'maintenance_mode_available' => true,
-    'maintenance_mode' => (bool) env('MAINTENANCE_MODE', false),
+    // Temporarily unavailable. Restore the env-backed value when the feature is re-enabled.
+    'maintenance_mode_available' => false,
+    'maintenance_mode' => false,
     'manual_user_verification' => (bool) env('MANUAL_USER_VERIFICATION', false),
     'notify_events' => (bool) env('NOTIFY_EVENTS', false),
     'register_auth' => env('REGISTER_AUTH', 'auth'),
