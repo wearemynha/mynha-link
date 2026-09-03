@@ -312,6 +312,7 @@ foreach($users as $user){if($user->littlelink_name != $configValue2){echo '<opti
 <a name="Advanced"><h2 class="ch2">{{__('messages.Advanced')}}</h2></a>
 
 {{-- start MAINTENANCE_MODE --}}
+@if(config('linkstack.maintenance_mode_available'))
 <form id="MAINTENANCE_MODE-form" action="{{route('editConfig')}}" enctype="multipart/form-data" method="post">
 <div class="form-group col-lg-8">
 <input value="maintenance" name="type" style="display:none;" type="text" class="form-control form-control-lg" required>
@@ -328,6 +329,7 @@ document.getElementById("MAINTENANCE_MODE-form").addEventListener("change", func
 });
 </script>
 </form>
+@endif
 {{-- end MAINTENANCE_MODE --}}
 
 
