@@ -415,7 +415,6 @@ return array (
 | Theme Updater
 |--------------------------------------------------------------------------
 |
-| resources/views/studio/theme-updater.blade.php
 |
 */
 
@@ -632,8 +631,6 @@ return array (
 'ALLOW_REGISTRATION.description' => 'Determina si los usuarios pueden registrarse en tu aplicación.',
 'NOTIFY_EVENTS.title' => 'Notificación sobre eventos',
 'NOTIFY_EVENTS.description' => 'Muestra una notificación si hay un evento en curso.',
-'NOTIFY_UPDATES.title' => 'Notificar actualizaciones',
-'NOTIFY_UPDATES.description' => 'Muestra una notificación si hay una nueva actualización disponible.',
 'DISPLAY_FOOTER.title' => 'Mostrar pie de página',
 'DISPLAY_FOOTER.description' => 'Determina si los enlaces del pie de página deben mostrarse.',
 'DISPLAY_CREDIT.title' => 'Mostrar crédito en las páginas de usuario',
@@ -676,18 +673,12 @@ return array (
 'MAIL_ENCRYPTION.description' => 'MAIL_ENCRYPTION',
 'MAIL_FROM_ADDRESS.title' => 'MAIL_FROM_ADDRESS',
 'MAIL_FROM_ADDRESS.description' => 'MAIL_FROM_ADDRESS',
-'JOIN_BETA.title' => 'Unirse al programa beta',
-'JOIN_BETA.description' => 'Permite el uso de versiones beta al actualizar. Aprende más sobre esto <a target=\'_blank\' href=\'https://linkstack.org/b\'>aquí</a>.',
-'SKIP_UPDATE_BACKUP.title' => 'Ignorar las copias de seguridad de la actualización',
-'SKIP_UPDATE_BACKUP.description' => 'Ignora las copias de seguridad al actualizar. Se recomienda mantener esta opción, pero puede causar errores en algunas configuraciones.',
 'CUSTOM_META_TAGS.title' => 'Activar etiquetas meta personalizadas',
 'CUSTOM_META_TAGS.description' => 'Permite el uso de etiquetas meta personalizadas en el encabezado de todas las páginas. Definido en la configuración avanzada.',
 'FORCE_HTTPS.title' => 'Forzar enlaces HTTPS',
 'FORCE_HTTPS.description' => 'Hace que todos los enlaces utilicen HTTPS por defecto. Se recomienda activar esta opción si estás utilizando un proxy inverso.',
 'ALLOW_CUSTOM_CODE_IN_THEMES.title' => 'Permitir código personalizado en los temas',
 'ALLOW_CUSTOM_CODE_IN_THEMES.description' => 'Permite el uso de código personalizado en los temas. Si estás utilizando temas de fuentes desconocidas, esto puede representar un riesgo de seguridad.',
-'ENABLE_THEME_UPDATER.title' => 'Activar el programa de actualización de temas',
-'ENABLE_THEME_UPDATER.description' => 'Determina si el programa de actualización de temas debe estar activo.',
 'ENABLE_SOCIAL_LOGIN.title' => 'Activar inicio de sesión a través de redes sociales',
 'ENABLE_SOCIAL_LOGIN.description' => 'Activa el inicio de sesión a través de redes sociales. Esta opción requiere una configuración adicional. Aprende más sobre esto <a target=\'_blank\' href=\'https://linkstack.org/social-login\'>aquí</a>.',
 'USE_THEME_PREVIEW_IFRAME.title' => 'Usar iframe como vista previa del tema',

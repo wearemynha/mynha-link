@@ -18,7 +18,6 @@ use GeoSot\EnvEditor\Facades\EnvEditor;
 
 use Auth;
 use DB;
-use ZipArchive;
 use File;
 
 use App\Models\User;
@@ -723,67 +722,18 @@ class UserController extends Controller
     //Save custom theme
     public function editTheme(request $request)
     {
-        $request->validate([
-            'zip' => 'sometimes|mimes:zip',
+        $userId = Auth::user()->id;
+        $availableThemes = collect(File::directories(base_path('themes')))
+            ->map(fn (string $path) => basename($path))
+            ->all();
+
+        $validated = $request->validate([
+            'theme' => ['required', 'string', Rule::in($availableThemes)],
         ]);
 
-        $userId = Auth::user()->id;
+        User::where('id', $userId)->update(['theme' => $validated['theme']]);
 
-        $zipfile = $request->file('zip');
-
-        $theme = $request->theme;
-        $message = "";
-
-        User::where('id', $userId)->update(['theme' => $theme]);
-
-
-
-        if (!empty($zipfile) && Auth::user()->role == 'admin') {
-
-            $themesPath = base_path('themes');
-            $tmpPath = base_path() . '/themes/temp.zip';
-            $zipfile->move($themesPath, "temp.zip");
-
-            $zip = new ZipArchive;
-            $zip->open($tmpPath);
-            $zip->extractTo($themesPath);
-            $zip->close();
-            unlink($tmpPath);
-
-            // Removes version numbers from folder.
-
-            $regex = '/[0-9.-]/';
-            $files = scandir($themesPath);
-            $files = array_diff($files, array('.', '..'));
-
-            foreach ($files as $file) {
-
-                $basename = basename($file);
-                $filePath = $themesPath . '/' . $basename;
-
-                if (!is_dir($filePath)) {
-                        
-                    try {
-                        File::delete($filePath);
-                    } catch (exception $e) {}
-
-                }
-
-                if (preg_match($regex, $basename)) {
-
-                    $newBasename = preg_replace($regex, '', $basename);
-                    $newPath = $themesPath . '/' . $newBasename;
-                    File::copyDirectory($filePath, $newPath);
-                    File::deleteDirectory($filePath);
-
-                }
-
-            }
-
-        }
-
-
-        return Redirect('/studio/theme')->with("success", $message);
+        return Redirect('/studio/theme');
     }
 
     //Show user (name, email, password)

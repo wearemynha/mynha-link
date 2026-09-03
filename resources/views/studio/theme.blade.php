@@ -99,85 +99,10 @@
         </div>
      </div>  
 
-     @if(auth()->user()->role == 'admin')
-    <div class="col-lg-12">
-        <div class="card   rounded">
-           <div class="card-body">
-              <div class="row">
-                  <div class="col-sm-12">  
-                    <h3 class="mb-4 card-header">{{__('messages.Manage themes')}}</h3>
-                    @if(env('ENABLE_THEME_UPDATER') == 'true')
-                    
-                    <div id="ajax-container">
-                    
-                        <br><br><br>
-                        <div class="accordion">
-                            <div class="accordion-item">
-                              <h2 class="accordion-header" id="details-header">
-                                <button class="accordion-button collapsed disabled" type="button" aria-expanded="false" aria-controls="details-collapse">
-                                    <div style="max-height:20px;max-width:20px;" class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">{{__('messages.Loading...')}}</span>
-                                    </div>
-                                </button>
-                              </h2>
-                              <div id="details-collapse" class="accordion-collapse collapse" aria-labelledby="details-header">
-                                <div class="accordion-body"></div>
-                              </div>
-                            </div>
-                          </div>
-                    
-                    </div>
-                    <div id="my-lazy-element"></div>
-                    @endif
-                    
-                    <br><br><br>
-                    <form action="{{ route('editTheme') }}" enctype="multipart/form-data" method="post">
-                        @csrf
-                        {{-- <h3>{{__('messages.Upload themes')}}</h3> --}}
-                        <div style="display: none;" class="form-group col-lg-8">
-                            <select class="form-control" name="theme">
-                                <option>{{ $page->theme }}</option>
-                            </select>
-                            <br>
-                        </div>
-                        <div class="mb-3">
-                            <label>{{__('messages.Upload themes')}}</label>
-                            <input type="file" accept=".zip" name="zip" class="form-control form-control-lg">
-                        </div><br><br>
-                        <div class="d-flex flex-column flex-md-row align-items-md-center">
-                            <button type="submit" class="btn btn-primary me-md-3 mb-3 mb-md-0">{{__('messages.Upload themes')}}</button>
-                            <button class="btn btn-danger me-md-3 mb-3 mb-md-0 delete-themes" title="Delete themes"><a href="{{ url('/admin/theme') }}" class="text-white">{{__('messages.Delete themes')}}</a></button>
-                            <button class="btn btn-info download-themes" title="Download more themes"><a href="https://linkstack.org/themes/" target="_blank" class="text-white">{{__('messages.Download themes')}}</a></button>
-                          </div>
-                    </form>
-                    </details>
-                    </div>
-                  </div>
-              </div>
-           </div>
-        </div>
-     </div>   
-     @endif 
-
 @endforeach
 
 <script src="{{ asset('assets/external-dependencies/jquery-1.12.4.min.js') }}"></script>
 </section>
-<script>
-$(window).on('load', function() {
-    var placeholder = $('#ajax-container');
-    var lazyElement = $('#my-lazy-element');
-    
-    $.ajax({
-        url: '../theme-updater',
-        success: function(response) {
-            placeholder.replaceWith(lazyElement);
-            
-            lazyElement.html(response);
-        }
-    });
-});
-</script>
 <script type="text/javascript">$("iframe").load(function() { $("iframe").contents().find("a").each(function(index) { $(this).on("click", function(event) { event.preventDefault(); event.stopPropagation(); }); }); });</script>
 
 @push('sidebar-scripts')

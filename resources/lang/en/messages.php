@@ -425,7 +425,6 @@ return [
     | Theme Updater
     |--------------------------------------------------------------------------
     |
-    | resources/views/studio/theme-updater.blade.php
     |
     */
 
@@ -643,8 +642,6 @@ return [
     'ALLOW_REGISTRATION.description' => 'Determines whether users can register for your application.',
     'NOTIFY_EVENTS.title' => 'Notify on events',
     'NOTIFY_EVENTS.description' => 'Displays a notification if an event is in progress.',
-    'NOTIFY_UPDATES.title' => 'Notify on updates',
-    'NOTIFY_UPDATES.description' => 'Displays a notification if a new update is available.',
     'DISPLAY_FOOTER.title' => 'Show footer',
     'DISPLAY_FOOTER.description' => 'Determines whether the footer links should be displayed.',
     'DISPLAY_CREDIT.title' => 'Display credit on user pages',
@@ -687,10 +684,6 @@ return [
     'MAIL_ENCRYPTION.description' => 'MAIL_ENCRYPTION',
     'MAIL_FROM_ADDRESS.title' => 'MAIL_FROM_ADDRESS',
     'MAIL_FROM_ADDRESS.description' => 'MAIL_FROM_ADDRESS',
-    'JOIN_BETA.title' => 'Join the Beta Program',
-    'JOIN_BETA.description' => 'Enables the use of beta versions when updating. Read more about this <a target=\'_blank\' href=\'https://linkstack.org/b\'>here</a>.',
-    'SKIP_UPDATE_BACKUP.title' => 'Skip update backups',
-    'SKIP_UPDATE_BACKUP.description' => 'Skips backups when updating. This option is recommended to be disabled at all times, <br>but it may cause errors in some configurations.',
     'CUSTOM_META_TAGS.title' => 'Enable custom meta tags',
     'CUSTOM_META_TAGS.description' => 'Enables use of custom meta tags in the head of all pages. Defined in Advanced Config.',
     'FORCE_HTTPS.title' => 'Force links HTTPS',
@@ -699,8 +692,6 @@ return [
     'ALLOW_CUSTOM_CODE_IN_THEMES.description' => 'Allows use of custom code in themes. If you use themes from unknown sources, <br>this may pose a security risk.',
     'ENABLE_ADMIN_BAR_USERS.title' => 'Enable Admin Bar for all users',
     'ENABLE_ADMIN_BAR_USERS.description' => 'If enabled users, all authenticated users will have an Admin Bar displayed on their links pages.',
-    'ENABLE_THEME_UPDATER.title' => 'Enable Theme Updater',
-    'ENABLE_THEME_UPDATER.description' => 'Determines if the theme updater should be active.',
     'ENABLE_SOCIAL_LOGIN.title' => 'Enable social login',
     'ENABLE_SOCIAL_LOGIN.description' => 'Enables social login. This option requires further setup. Read more about this <a target=\'_blank\' href=\'https://linkstack.org/social-login\'>here</a>.',
     'USE_THEME_PREVIEW_IFRAME.title' => 'Use iframe as theme preview',

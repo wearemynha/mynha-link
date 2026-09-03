@@ -58,19 +58,6 @@
                   <div class="tab-pane fade show active" role="tabpanel" style="scroll-margin-top: 1000px;" aria-labelledby="home-tab" id="1">
                     <section class="text-gray-400">
                       <div class="card-body p-0 p-md-3 d-flex flex-column">
-                        <a href="?alternative-config" class="mb-1">
-                          <div class="card bg-soft-primary option w-100 p-3">
-                            <div class="card-body p-3">
-                              <div class="d-flex align-items-center text-body">
-                                <i class="bi bi-pencil-square opt-img mr-3"></i>
-                                <div>
-                                  <h3 class="counter mb-2 text-body" style="visibility: visible;">{{__('messages.Alternative Config Editor')}}</h3>
-                                  <p class="mb-0">{{__('messages.Use the Alternative Config Editor to edit the config directly')}}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </a>
                         <a href="{{ url('admin/phpinfo') }}" class="mb-1">
                           <div class="card bg-soft-primary option w-100 p-3">
                             <div class="card-body p-3">
@@ -180,9 +167,6 @@
                   <!-- Back to top button -->
                   <a id="button-top"></a>
                   
-                  @elseif(request()->server('QUERY_STRING', '') == 'alternative-config' && !config('linkstack.single_user_mode'))
-                  @include('components.config.alternative-config')
-                  @include('components.config.back-button')
                   @endif
                   
                   @push("sidebar-scripts")

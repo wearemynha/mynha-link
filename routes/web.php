@@ -170,23 +170,16 @@ Route::group([
     Route::post('/admin/pages', [AdminController::class, 'editSitePage'])->name('editSitePage');
     Route::get('/admin/advanced-config', [AdminController::class, 'showFileEditor'])->name('showAdvancedConfig');
     Route::post('/admin/advanced-config', [AdminController::class, 'editAC'])->name('editAC');
-    Route::get('/admin/env', [AdminController::class, 'showFileEditor'])->name('showEnvironmentEditor');
-    Route::post('/admin/env', [AdminController::class, 'editENV'])->name('editENV');
     Route::get('/admin/site', [AdminController::class, 'showSite'])->name('showSite');
     Route::post('/admin/site', [AdminController::class, 'editSite'])->name('editSite');
     Route::get('/admin/site/delavatar', [AdminController::class, 'delAvatar'])->name('delAvatar');
     Route::get('/admin/site/delfavicon', [AdminController::class, 'delFavicon'])->name('delFavicon');
     Route::get('/admin/phpinfo', [AdminController::class, 'phpinfo'])->name('phpinfo');
     Route::get('/admin/backups', [AdminController::class, 'showBackups'])->name('showBackups');
-    Route::post('/admin/theme', [AdminController::class, 'deleteTheme'])->name('deleteTheme');
-    Route::get('/admin/theme', [AdminController::class, 'showThemes'])->name('showThemes');
-    Route::get('/update/theme', [AdminController::class, 'updateThemes'])->name('updateThemes');
     Route::get('/admin/config', [AdminController::class, 'showConfig'])->name('showConfig');
     Route::post('/admin/config', [AdminController::class, 'editConfig'])->name('editConfig');
     Route::get('/send-test-email', [AdminController::class, 'SendTestMail'])->name('SendTestMail');
     Route::get('/auth-as/{id}', [AdminController::class, 'authAsID'])->name('authAsID');
-    Route::get('/theme-updater', function () {return view('studio/theme-updater', []);});
-    Route::get('/update', function () {return view('update', []);});
     Route::get('/backup', function () {return view('backup', []);});
 
     Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin', 'as'=>'admin'],function() {
