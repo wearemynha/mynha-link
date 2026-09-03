@@ -1,6 +1,11 @@
 <?php
 
-$supportedLocales = array_map('trim', explode(',', env('LOCALES', 'de, es, pt, zh, ms')));
+$supportedLocales = ['en', 'es', 'pt-BR'];
+$locale = env('LOCALE', 'en');
+
+if (!in_array($locale, $supportedLocales, true)) {
+    $locale = 'en';
+}
 
 return [
 
@@ -80,7 +85,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('TZ', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +98,7 @@ return [
     |
     */
 
-    'locale' => env('LOCALE', 'en'),
+    'locale' => $locale,
 
     /*
     |--------------------------------------------------------------------------

@@ -6,10 +6,10 @@ use Tests\TestCase;
 
 class ApplicationConfigTest extends TestCase
 {
-    public function test_default_supported_locales_are_parsed(): void
+    public function test_only_product_supported_locales_are_configured(): void
     {
         $this->assertSame(
-            ['de', 'es', 'pt', 'zh', 'ms'],
+            ['en', 'es', 'pt-BR'],
             config('app.supported_locales')
         );
     }
