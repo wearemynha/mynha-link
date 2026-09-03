@@ -194,10 +194,10 @@ function linkstack_uri($path) {
 function footer($key)
 {
     $upperStr = strtoupper($key);
-    if (env('TITLE_FOOTER_'.$upperStr) == "") {
+    if (config('linkstack.footer_titles.'.strtolower($key), '') == "") {
         $title = __('messages.footer.'.$key);
     } else {
-        $title = env('TITLE_FOOTER_'.$upperStr);
+        $title = config('linkstack.footer_titles.'.strtolower($key), '');
     }
     return $title;
 }

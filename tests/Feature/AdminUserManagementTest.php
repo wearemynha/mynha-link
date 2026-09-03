@@ -38,7 +38,7 @@ class AdminUserManagementTest extends TestCase
             ->assertOk();
 
         $usersHtml = $usersResponse->getContent();
-        $livewireScriptPosition = strpos($usersHtml, 'livewire/livewire.js');
+        $livewireScriptPosition = strpos($usersHtml, 'livewire/livewire');
         $sortableScriptPosition = strpos($usersHtml, 'assets/js/livewire-sortable.js');
 
         $this->assertNotFalse($livewireScriptPosition);

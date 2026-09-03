@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReportSubmissionMail;
-use GeoSot\EnvEditor\Facades\EnvEditor;
+use App\Services\RuntimeConfigurationManager;
 
 use Auth;
 use DB;
@@ -131,7 +131,7 @@ class UserController extends Controller
     //Show littlelink page as home page if set in config
     public function littlelinkhome(request $request)
     {
-        $littlelink_name = env('HOME_URL');
+        $littlelink_name = config('linkstack.home_url');
         $id = User::select('id')->where('littlelink_name', $littlelink_name)->value('id');
 
         if (empty($id)) {
@@ -565,7 +565,7 @@ class UserController extends Controller
     }
 
     //Save littlelink page (name, description, logo)
-    public function editPage(Request $request)
+    public function editPage(Request $request, RuntimeConfigurationManager $runtimeConfigurationManager)
     {
         $userId = Auth::user()->id;
         $littlelink_name = Auth::user()->littlelink_name;
@@ -602,8 +602,9 @@ class UserController extends Controller
         $sharebtn = $request->sharebtn;
         $tablinks = $request->tablinks;
 
-        if(env('HOME_URL') !== '' && $pageName != $littlelink_name && $littlelink_name == env('HOME_URL')){
-            EnvEditor::editKey('HOME_URL', $pageName);
+        if(config('linkstack.home_url') !== '' && $pageName != $littlelink_name && $littlelink_name == config('linkstack.home_url')){
+            $runtimeConfigurationManager->setHomeUrl($pageName);
+            $runtimeConfigurationManager->rebuildCache();
         }
     
         User::where('id', $userId)->update([
@@ -998,7 +999,7 @@ class UserController extends Controller
         $formData = $request->all();
     
         try {
-            Mail::to(env('ADMIN_EMAIL'))->send(new ReportSubmissionMail($formData));
+            Mail::to(config('linkstack.admin_email'))->send(new ReportSubmissionMail($formData));
             
             return redirect('report')->with('success', __('messages.report_success'));
         } catch (\Exception $e) {

@@ -163,7 +163,7 @@ if (isset($_COOKIE['LinkCount'])) {
                                                                </span>
                                                             </a>
 
-                                                            @if(env('ENABLE_BUTTON_EDITOR') === true)
+                                                            @if(config('linkstack.enable_button_editor') === true)
                                                             @if(($link->button_id == '1' || $link->button_id == '2') && $link->type == 'link')
                                                                 <a style="float: right;" href="{{ route('editCSS', $link->id ) }}" class="btn btn-sm me-1 btn-icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add" data-bs-placement="top" data-original-title="{{__('messages.Customize')}}">
                                                                     <span class="btn-inner">

@@ -45,7 +45,7 @@
                                 </div>
                               </div>
                               <div class="card-body">
-                                @if(env('USE_THEME_PREVIEW_IFRAME') === false or $page->littlelink_name == '')
+                                @if(config('linkstack.use_theme_preview_iframe') === false or $page->littlelink_name == '')
                                 <center><img style="width:95%;max-width:700px;argin-left:1rem!important;" src="@if(file_exists(base_path() . '/themes/' . $page->theme . '/preview.png')){{url('/themes/' . $page->theme . '/preview.png')}}@elseif($page->theme === 'default' or empty($page->theme)){{url('/assets/linkstack/images/themes/default.png')}}@else{{url('/assets/linkstack/images/themes/no-preview.png')}}@endif"></img></center>
                                  @else
                                 <iframe frameborder="0" allowtransparency="true" id="frPreview" style="background: #FFFFFF;height:400px;" class='w-100' src="{{ url('') }}/@<?= Auth::user()->littlelink_name ?>">{{__('messages.No compatible browser')}}</iframe>
@@ -67,7 +67,7 @@
            <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">  
-                    @if(env('ALLOW_CUSTOM_BACKGROUNDS') == true)
+                    @if(config('linkstack.allow_custom_backgrounds') == true)
                     <form action="{{ route('themeBackground') }}" enctype="multipart/form-data" method="post">
                         @csrf
                         <h3 class="mb-4 card-header">{{__('messages.Custom background')}}</h3>

@@ -25,7 +25,7 @@
                     @endif
                     </div>
                     <!--logo End-->
-                <h4 class="logo-title ms-3">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title ms-3">{{config('app.name')}}</h4>
               </a>
               <h2 class="mb-2 text-center mt-4">{{__('messages.Verification Status')}}</h2>
               <p class="text-center"><b>{{__('messages.auth_pending')}}</b></p>

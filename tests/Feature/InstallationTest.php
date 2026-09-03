@@ -81,7 +81,7 @@ class InstallationTest extends TestCase
         $advancedConfigManager->shouldReceive('finalizeInstallation')->once();
         $this->app->instance(AdvancedConfigManager::class, $advancedConfigManager);
 
-        $installingPath = base_path('INSTALLING');
+        $installingPath = storage_path('app/INSTALLING');
         $installingContents = file_exists($installingPath) ? file_get_contents($installingPath) : null;
 
         try {
@@ -141,9 +141,9 @@ class InstallationTest extends TestCase
     public function test_installer_creates_a_verified_administrator_with_a_strong_password(): void
     {
         EnvEditor::shouldReceive('keyExists')->once()->with('ADMIN_EMAIL')->andReturn(false);
-        EnvEditor::shouldReceive('addKey')->once()->with('ADMIN_EMAIL', 'admin@mynha.example');
+        EnvEditor::shouldReceive('addKey')->once()->with('ADMIN_EMAIL', '"admin@mynha.example"');
 
-        $lockPath = base_path('INSTALLERLOCK');
+        $lockPath = storage_path('app/INSTALLERLOCK');
         $lockAlreadyExisted = file_exists($lockPath);
 
         try {

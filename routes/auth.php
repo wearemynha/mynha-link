@@ -29,7 +29,7 @@ if(config('advanced-config.forgot_password_url') != '') {
 }
 
 Route::post('/validate-handle', [RegisteredUserController::class, 'validateHandle']);
-    if(env('ALLOW_REGISTRATION') or $register !== '/register') {
+    if(config('linkstack.allow_registration') or $register !== '/register') {
         Route::get($register, [RegisteredUserController::class, 'create'])
             ->middleware('guest')
             ->middleware('max.users')
@@ -102,4 +102,3 @@ Route::get('/blocked', function () {
                         return redirect(url('dashboard'));
                     }
                 })->name('blocked');
-                

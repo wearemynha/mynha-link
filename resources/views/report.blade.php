@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     @php $GLOBALS['themeName'] = config('advanced-config.home_theme'); @endphp
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      @if(env('CUSTOM_META_TAGS') == 'true' and config('advanced-config.title') != '')
+      @if(config('linkstack.custom_meta_tags') == 'true' and config('advanced-config.title') != '')
       <title>{{ config('advanced-config.title') }}</title>
       @else
       <title>{{ config('app.name') }}</title>

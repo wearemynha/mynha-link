@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     @php $GLOBALS['themeName'] = config('advanced-config.home_theme'); @endphp
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      @if(env('CUSTOM_META_TAGS') == 'true' and config('advanced-config.title') != '')
+      @if(config('linkstack.custom_meta_tags') == 'true' and config('advanced-config.title') != '')
       <title>{{ config('advanced-config.title') }}</title>
       @else
       <title>{{ config('app.name') }}</title>
@@ -77,7 +77,7 @@
                     </div>
                   <!--logo End-->
                   
-                  <h4 class="logo-title">{{env('APP_NAME')}}</h4>
+                  <h4 class="logo-title">{{config('app.name')}}</h4>
               </a>
             </div>
           </nav>
@@ -149,16 +149,16 @@
     <!-- Footer -->
     <footer class="text-center mt-5">
         <ul class="mb-0 p-0 footer-content">
-          @if(env('DISPLAY_FOOTER') === true)
-            @if(env('DISPLAY_FOOTER_HOME') === true)<li class="list-inline-item"><a class="list-inline-item" href="@if(str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) === "" ){{ url('') }}@else{{ str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) }}@endif">{{footer('Home')}}</a></li>@endif
-            @if(env('DISPLAY_FOOTER_TERMS') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
-            @if(env('DISPLAY_FOOTER_PRIVACY') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
-            @if(env('DISPLAY_FOOTER_CONTACT') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
+          @if(config('linkstack.display_footer') === true)
+            @if(config('linkstack.display_footer_home') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ config('linkstack.home_footer_link') ?: url('') }}">{{footer('Home')}}</a></li>@endif
+            @if(config('linkstack.display_footer_terms') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
+            @if(config('linkstack.display_footer_privacy') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
+            @if(config('linkstack.display_footer_contact') === true)<li class="list-inline-item"><a class="list-inline-item" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
           @endif
         </ul>
         <div class="right-panel">
           {{__('messages.Copyright')}} &copy; @php echo date('Y'); @endphp {{ config('app.name') }}
-          @if(env('DISPLAY_CREDIT_FOOTER') === true)
+          @if(config('linkstack.display_credit_footer') === true)
             <span class="">
               - {{__('messages.Made with')}} 
                 <svg class="icon-15" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

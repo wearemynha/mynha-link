@@ -1,4 +1,4 @@
-@if(env('ENABLE_BUTTON_EDITOR') === true)
+@if(config('linkstack.enable_button_editor') === true)
 @extends('layouts.sidebar')
 
 @include('components.favicon')

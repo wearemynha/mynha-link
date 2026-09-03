@@ -1,4 +1,3 @@
-@if(request()->server('QUERY_STRING', '') === '')
 <!DOCTYPE html>
 @include('layouts.lang')
 <head>
@@ -6,13 +5,13 @@
 
 @include('layouts.analytics')
 
-  @if(env('CUSTOM_META_TAGS') == 'true' and config('advanced-config.title') != '')
+  @if(config('linkstack.custom_meta_tags') == 'true' and config('advanced-config.title') != '')
   <title>{{ config('advanced-config.title') }}</title>
   @else
   <title>{{ config('app.name') }}</title>
   @endif
 
-  @if(env('CUSTOM_META_TAGS') == 'true')
+  @if(config('linkstack.custom_meta_tags') == 'true')
   @include('layouts.meta') 
   @else
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -95,7 +94,11 @@ body {
           <h3>{{__('messages.Please check back with us later')}}</h3>
           @if(auth()->user() && auth()->user()->role == 'admin')
           <br><center><i>{{__('messages.Admin options:')}}</i></center>
-          <a href="{{url('dashboard')}}">{{__('messages.Dashboard')}}</a> | <a href="{{url('?maintenance=off')}}" onclick="return confirm('{{__('messages.Warn.Disable.Maintenance')}}');">{{__('messages.Turn off')}}</a>
+          <a href="{{url('dashboard')}}">{{__('messages.Dashboard')}}</a> |
+          <form action="{{ route('disableMaintenance') }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" onclick="return confirm('{{__('messages.Warn.Disable.Maintenance')}}');">{{__('messages.Turn off')}}</button>
+          </form>
           @endif
         </div>
 
@@ -104,11 +107,3 @@ body {
   </div>
 </body>
 </html>
-@elseif(request()->server('QUERY_STRING', '') === 'maintenance=off')
-@php
-EnvEditor::editKey('MAINTENANCE_MODE', false);
-ob_clean();
-header("Location: " . url('dashboard'));
-exit;
-@endphp
-@endif

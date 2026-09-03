@@ -34,7 +34,7 @@ foreach($pages as $page)
                     @endif
                     </div>
                     <!--logo End-->
-                <h4 class="logo-title ms-3">{{env('APP_NAME')}}</h4>
+                <h4 class="logo-title ms-3">{{config('app.name')}}</h4>
               </a>
               <h2 class="mb-2 text-center">{{__('messages.Forgot your password?')}}</h2>
               <p class="text-center">{{__('messages.No problem')}}</p>

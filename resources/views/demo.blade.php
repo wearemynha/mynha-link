@@ -30,7 +30,7 @@
 
   @include('layouts.fonts') 
 
-  @if(theme('enable_custom_code') == "true" and theme('enable_custom_head') == "true" and env('ALLOW_CUSTOM_CODE_IN_THEMES') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-head')@endif
+  @if(theme('enable_custom_code') == "true" and theme('enable_custom_head') == "true" and config('linkstack.allow_custom_code_in_themes') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-head')@endif
 
   @if($GLOBALS['themeName'] != '' and $GLOBALS['themeName'] != 'default')
   <link rel="stylesheet" href="themes/{{$GLOBALS['themeName']}}/share.button.css">
@@ -60,7 +60,7 @@
 </head>
 <body>
 
-@if(theme('enable_custom_code') == "true" and theme('enable_custom_body') == "true" and env('ALLOW_CUSTOM_CODE_IN_THEMES') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body')@endif
+@if(theme('enable_custom_code') == "true" and theme('enable_custom_body') == "true" and config('linkstack.allow_custom_code_in_themes') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body')@endif
 
 @if($GLOBALS['themeName'] != '' and $GLOBALS['themeName'] != 'default')
     <!-- Enables parallax background animations -->
@@ -151,7 +151,7 @@
     </div>
   </div>
 
-  @if(theme('enable_custom_code') == "true" and theme('enable_custom_body_end') == "true" and env('ALLOW_CUSTOM_CODE_IN_THEMES') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body-end')@endif
+  @if(theme('enable_custom_code') == "true" and theme('enable_custom_body_end') == "true" and config('linkstack.allow_custom_code_in_themes') == 'true')@include($GLOBALS['themeName'] . '.extra.custom-body-end')@endif
 
 </body>
 </html>

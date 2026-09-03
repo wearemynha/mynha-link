@@ -2,7 +2,7 @@
 @include('layouts.lang')
 <head>
   <meta charset="utf-8">
-  <title>{{ucfirst(Request::segment(2))}} - {{env('APP_NAME')}}</title>
+  <title>{{ucfirst(Request::segment(2))}} - {{config('app.name')}}</title>
 
 @include('layouts.analytics')
 
@@ -59,7 +59,7 @@
         @endif
 
         <div class="jumbotron" style="margin-top: 10%">
-          <h1 class="display-4">{{env('TITLE_FOOTER_'.strtoupper($name))}}</h1>
+          <h1 class="display-4">{{config('linkstack.footer_titles.'.strtolower($name), '')}}</h1>
           <hr class="my-4">
           <p>
             <?php echo $data['page']->$name; ?>
@@ -72,16 +72,16 @@
       <footer class="footer mt-5">
         <div class="footer-body">
             <ul class="left-panel list-inline mb-0 p-0">
-              @if(env('DISPLAY_FOOTER') === true)
-                @if(env('DISPLAY_FOOTER_HOME') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="@if(str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) === "" ){{ url('') }}@else{{ str_replace('"', "", EnvEditor::getKey('HOME_FOOTER_LINK')) }}@endif">{{footer('Home')}}</a></li>@endif
-                @if(env('DISPLAY_FOOTER_TERMS') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
-                @if(env('DISPLAY_FOOTER_PRIVACY') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
-                @if(env('DISPLAY_FOOTER_CONTACT') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
+              @if(config('linkstack.display_footer') === true)
+                @if(config('linkstack.display_footer_home') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ config('linkstack.home_footer_link') ?: url('') }}">{{footer('Home')}}</a></li>@endif
+                @if(config('linkstack.display_footer_terms') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ url('') }}/pages/{{ strtolower(footer('Terms')) }}">{{footer('Terms')}}</a></li>@endif
+                @if(config('linkstack.display_footer_privacy') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ url('') }}/pages/{{ strtolower(footer('Privacy')) }}">{{footer('Privacy')}}</a></li>@endif
+                @if(config('linkstack.display_footer_contact') === true)<li class="list-inline-item"><a class="footer-hover spacing" href="{{ url('') }}/pages/{{ strtolower(footer('Contact')) }}">{{footer('Contact')}}</a></li>@endif
               @endif                     
             </ul>
             <div class="right-panel">
               {{__('messages.Copyright')}} &copy; @php echo date('Y'); @endphp {{ config('app.name') }}
-              @if(env('DISPLAY_CREDIT_FOOTER') === true)
+              @if(config('linkstack.display_credit_footer') === true)
                 <span class="">
                   - {{__('messages.Made with')}} 
                     <svg class="icon-15" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
