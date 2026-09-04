@@ -28,6 +28,8 @@ class InstallationTest extends TestCase
             ->name('editConfigInstaller');
         Route::getRoutes()->refreshNameLookups();
 
+        config(['app.locale' => 'en']);
+
         Schema::shouldReceive('hasTable')
             ->once()
             ->with('users')
@@ -38,6 +40,108 @@ class InstallationTest extends TestCase
         $html = app(InstallerController::class)->showInstaller()->render();
 
         $this->assertStringContainsString('language-form', $html);
+        $this->assertStringContainsString('assets/mynha-assets/mynha-logo-installer.svg', $html);
+        $this->assertStringContainsString('assets/mynha-assets/mynha-icon-preto-verde.svg', $html);
+        $this->assertStringContainsString('assets/mynha-assets/mynha.css', $html);
+        $this->assertStringContainsString('class="mynha-ui mynha-installer"', $html);
+        $this->assertStringNotContainsString('skeleton-auto.css', $html);
+        $this->assertStringNotContainsString('assets/linkstack/images/logo.svg', $html);
+        $this->assertStringNotContainsString('<style>', $html);
+        $this->assertStringContainsString('mynha-select', $html);
+        $this->assertStringContainsString('mynha-button--primary', $html);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('brandedInstallerSteps')]
+    public function test_installer_steps_keep_the_branding_and_do_not_load_public_theme_styles(string $step): void
+    {
+        foreach (['prepareDatabase', 'createAdmin', 'options'] as $routeName) {
+            Route::post('/_test/'.$routeName, fn () => response()->noContent())->name($routeName);
+        }
+        Route::getRoutes()->refreshNameLookups();
+        $this->app->instance('request', Request::create('/?'.$step));
+
+        $html = app(InstallerController::class)->showInstaller()->render();
+
+        $this->assertStringContainsString('assets/mynha-assets/mynha-logo-installer.svg', $html);
+        $this->assertStringContainsString('assets/mynha-assets/mynha.css', $html);
+        $this->assertStringNotContainsString('skeleton-dark.css', $html);
+        $this->assertStringNotContainsString('skeleton-light.css', $html);
+        $this->assertStringNotContainsString('skeleton-auto.css', $html);
+    }
+
+    public function test_administrator_password_fields_have_independent_accessible_toggles(): void
+    {
+        Route::post('/_test/create-admin', fn () => response()->noContent())->name('createAdmin');
+        Route::getRoutes()->refreshNameLookups();
+        $this->app->instance('request', Request::create('/?4'));
+
+        $html = app(InstallerController::class)->showInstaller()->render();
+
+        $this->assertStringContainsString('assets/mynha-assets/mynha.js', $html);
+        $this->assertSame(2, substr_count($html, 'data-password-toggle'));
+        foreach (['admin-password' => 'password', 'admin-password-confirmation' => 'password_confirmation'] as $id => $name) {
+            $this->assertStringContainsString('id="'.$id.'" name="'.$name.'" type="password"', $html);
+            $this->assertStringContainsString('aria-controls="'.$id.'" aria-pressed="false"', $html);
+            $this->assertStringContainsString('<label for="'.$id.'">', $html);
+        }
+        $this->assertSame(2, substr_count($html, 'type="button" class="mynha-password-toggle" hidden'));
+        $this->assertSame(2, substr_count($html, 'autocomplete="new-password"'));
+        $this->assertSame(2, substr_count($html, 'minlength="12"'));
+        $this->assertStringContainsString('data-label-show="'.__('messages.Show password').'"', $html);
+        $this->assertStringContainsString('data-label-hide="'.__('messages.Hide password').'"', $html);
+    }
+
+    public static function brandedInstallerSteps(): array
+    {
+        return [
+            'dependencies' => ['2'],
+            'database' => ['3'],
+            'administrator' => ['4'],
+            'options' => ['5'],
+            'error' => ['error'],
+        ];
+    }
+
+    public function test_brand_styles_are_split_into_shared_modules(): void
+    {
+        $entry = file_get_contents(base_path('assets/mynha-assets/mynha.css'));
+        $tokens = file_get_contents(base_path('assets/mynha-assets/css/tokens.css'));
+        $components = file_get_contents(base_path('assets/mynha-assets/css/components.css'));
+        $installer = file_get_contents(base_path('assets/mynha-assets/css/installer.css'));
+
+        foreach (['tokens', 'base', 'components', 'auth', 'installer', 'home', 'dashboard'] as $module) {
+            $this->assertStringContainsString('@import url("./css/'.$module.'.css")', $entry);
+            $this->assertFileExists(base_path('assets/mynha-assets/css/'.$module.'.css'));
+        }
+        $this->assertStringContainsString(':root {', $tokens);
+        $this->assertStringContainsString('--mynha-font-primary:', $tokens);
+        $this->assertStringContainsString('--mynha-color-action:', $tokens);
+        $this->assertStringContainsString('.mynha-ui .mynha-button', $components);
+        $this->assertStringContainsString('.mynha-ui :is(.mynha-panel, .mynha-card)', $components);
+        $this->assertStringContainsString('.mynha-installer', $installer);
+        $this->assertStringContainsString('#language-form', $installer);
+    }
+
+    public function test_installer_fonts_and_logo_are_available_as_local_assets(): void
+    {
+        foreach ([
+            'assets/mynha-assets/mynha-logo-installer.svg',
+            'assets/mynha-assets/mynha.css',
+            'assets/mynha-assets/mynha.js',
+            'assets/mynha-assets/css/tokens.css',
+            'assets/mynha-assets/css/base.css',
+            'assets/mynha-assets/css/components.css',
+            'assets/mynha-assets/css/auth.css',
+            'assets/mynha-assets/css/installer.css',
+            'assets/mynha-assets/css/home.css',
+            'assets/mynha-assets/css/dashboard.css',
+            'assets/fonts/AnekLatin/AnekLatin-Variable.ttf',
+            'assets/fonts/AnekLatin/OFL.txt',
+            'assets/fonts/AlbertSans/AlbertSans-Variable.ttf',
+            'assets/fonts/AlbertSans/OFL.txt',
+        ] as $asset) {
+            $this->assertFileExists(base_path($asset));
+        }
     }
 
     public function test_installer_creates_a_missing_locale_setting(): void
