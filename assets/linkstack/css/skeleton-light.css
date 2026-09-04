@@ -1,4 +1,4 @@
-/*
+S/*
 * LinkStack
 * https://linkstack.org
 * Free to use under the GPL-3.0 License.
@@ -111,7 +111,7 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
-  color: #0085FF; 
+  color: #0085FF;
   text-decoration: none;
 }
 a:hover {
